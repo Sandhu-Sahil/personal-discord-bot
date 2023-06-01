@@ -2,14 +2,15 @@ package handler
 
 import (
 	"fmt"
+	"sandhu-sahil/bot/variables"
 	"strings"
 
 	"github.com/bwmarrin/discordgo"
 )
 
-func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
+func MessageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	// Ignore all messages created by the bot itself
-	if m.Author.ID == BotID {
+	if m.Author.ID == variables.BotID {
 		return
 	}
 
@@ -47,31 +48,31 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 
 	// if message contain personal mentions
-	if m.ContentWithMentionsReplaced() == `<@&998929334645563502>` { //@fudi deya
+	if strings.Contains(m.ContentWithMentionsReplaced(), `<@&998929334645563502>`) { //@fudi deya
 		_, err := s.ChannelMessageSend(m.ChannelID, "kithe marre aa kuriyave sare")
 		if err != nil {
 			fmt.Print(err)
 		}
 	}
-	if m.ContentWithMentionsReplaced() == `<@&765554608172957696>` { //@kings
+	if strings.Contains(m.ContentWithMentionsReplaced(), `<@&765554608172957696>`) { //@kings
 		_, err := s.ChannelMessageSend(m.ChannelID, "Acha, gusse sare king bnate aa")
 		if err != nil {
 			fmt.Print(err)
 		}
 	}
-	if m.ContentWithMentionsReplaced() == `<@&789483612072181771>` { //@ace
+	if strings.Contains(m.ContentWithMentionsReplaced(), `<@&789483612072181771>`) { //@ace
 		_, err := s.ChannelMessageSend(m.ChannelID, "aces te oda he FUDU aa")
 		if err != nil {
 			fmt.Print(err)
 		}
 	}
-	if m.ContentWithMentionsReplaced() == `<@&1090312377876107324>` { //@shady sandhu sunyara squad
+	if strings.Contains(m.ContentWithMentionsReplaced(), `<@&1090312377876107324>`) { //@shady sandhu sunyara squad
 		_, err := s.ChannelMessageSend(m.ChannelID, "serious kaamm aa jalde kathe hovo")
 		if err != nil {
 			fmt.Print(err)
 		}
 	}
-	if m.ContentWithMentionsReplaced() == `@Sahil Sandhu` { // personal
+	if strings.Contains(m.ContentWithMentionsReplaced(), `@Sahil Sandhu`) { // personal
 		_, err := s.ChannelMessageSend(m.ChannelID, "peo nu kato vaja marre janda")
 		if err != nil {
 			fmt.Print(err)

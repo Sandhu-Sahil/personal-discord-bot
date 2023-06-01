@@ -5,8 +5,11 @@ import (
 	"log"
 	"os"
 	"os/signal"
+	"sandhu-sahil/bot/helper"
+	"sandhu-sahil/bot/variables"
 	"syscall"
 
+	"github.com/bwmarrin/discordgo"
 	"github.com/joho/godotenv"
 )
 
@@ -15,27 +18,27 @@ func init() {
 	if err != nil {
 		log.Fatalf("err loading: %v", err)
 	}
-}
 
-func main() {
-	Bot, err = NewBot()
+	variables.Bot, err = discordgo.New("Bot " + os.Getenv("MyToken"))
 	if err != nil {
 		log.Fatalf("err creating bot: %v", err)
 	}
 
-	user, err := Bot.User("@me")
+	user, err := variables.Bot.User("@me")
 	if err != nil {
 		log.Fatal(err)
 		return
 	}
-	BotID = user.ID
+	variables.BotID = user.ID
+}
 
-	HandleBot()
+func main() {
+	helper.HandleBot()
 
 	fmt.Println("Bot is now running")
 	sc := make(chan os.Signal, 1)
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
 	<-sc
 
-	Bot.Close()
+	variables.Bot.Close()
 }
