@@ -32,7 +32,7 @@ func MessageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 		}
 	case strings.Contains(strings.ToUpper(m.Content), "HI"):
 		{
-			_, err := s.ChannelMessageSend(m.ChannelID, "Hello sir, how can I help you!")
+			_, err := s.ChannelMessageSend(m.ChannelID, "Hi sir, how can I help you!")
 			if err != nil {
 				fmt.Print(err)
 			}
