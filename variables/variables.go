@@ -7,20 +7,21 @@ import (
 )
 
 var (
-	BotID   string
-	Bot     *discordgo.Session
-	Message *discordgo.MessageCreate
-	err     error
-
+	BotID          string
+	Bot            *discordgo.Session
+	Message        *discordgo.MessageCreate
+	err            error
+	RemoveCommands bool
 	// Sessions   *framework.SessionManager
 	// youtube    *framework.Youtube
-	CmdHandler *framework.CommandHandler
-	PREFIX     string
-
-	ServiceUrl    string
-	OwnerId       string
-	UseSharding   bool
-	ShardId       int
-	ShardCount    int
-	DefaultStatus string
+	CmdHandler      *framework.CommandHandler
+	PREFIX          string
+	ServiceUrl      string
+	OwnerId         string
+	UseSharding     bool
+	ShardId         int
+	ShardCount      int
+	DefaultStatus   string
+	GuildID         string
+	CreatedCommands []*discordgo.ApplicationCommand
 )
