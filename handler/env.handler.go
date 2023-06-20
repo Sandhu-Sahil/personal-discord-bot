@@ -17,10 +17,10 @@ func LoadEnv() {
 	variables.PREFIX = os.Getenv("PREFIX")
 	variables.ServiceUrl = os.Getenv("SERVICE_URL")
 	variables.OwnerId = os.Getenv("OWNER_ID")
-	variables.UseSharding = os.Getenv("USE_SHARDING") == "true"
+	// variables.UseSharding = os.Getenv("USE_SHARDING") == "true"
 
-	variables.ShardId = 0
-	variables.ShardCount = 1
+	// variables.ShardId = 0
+	// variables.ShardCount = 1
 
 	variables.GuildID = os.Getenv("GUILD_ID")
 	variables.DefaultStatus = os.Getenv("DEFAULT_STATUS")

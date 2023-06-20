@@ -14,13 +14,13 @@ var (
 	RemoveCommands bool
 	// Sessions   *framework.SessionManager
 	// youtube    *framework.Youtube
-	CmdHandler      *framework.CommandHandler
-	PREFIX          string
-	ServiceUrl      string
-	OwnerId         string
-	UseSharding     bool
-	ShardId         int
-	ShardCount      int
+	CmdHandler *framework.CommandHandler
+	PREFIX     string
+	ServiceUrl string
+	OwnerId    string
+	// UseSharding     bool
+	// ShardId         int
+	// ShardCount      int
 	DefaultStatus   string
 	GuildID         string
 	CreatedCommands []*discordgo.ApplicationCommand

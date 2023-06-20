@@ -27,7 +27,7 @@ func main() {
 	<-sc
 
 	fmt.Println()
-	log.Println("Gracefully shutting down")
+	log.Println("Gracefully shutting down, Please wait...")
 
 	if variables.RemoveCommands {
 		for _, cmd := range variables.CreatedCommands {
@@ -37,4 +37,7 @@ func main() {
 			}
 		}
 	}
+
+	log.Println("Bot is now offline. Goodbye!")
+	fmt.Println()
 }
