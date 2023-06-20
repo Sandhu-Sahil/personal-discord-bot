@@ -21,3 +21,14 @@ func HelpCommand(ctx framework.Context) {
 	str := buffer.String()
 	ctx.Reply(str[:len(str)-2])
 }
+
+func HelpCommandIntractions() string {
+	buffer := bytes.NewBufferString("Commands: \n")
+	for _, cmd := range variables.CreatedCommands {
+		// return all commands in text format
+		msg := fmt.Sprintf("\t %s - %s\n", cmd.Name, cmd.Description)
+		buffer.WriteString(msg)
+	}
+	str := buffer.String()
+	return str
+}

@@ -12,7 +12,7 @@ var (
 	Message        *discordgo.MessageCreate
 	err            error
 	RemoveCommands bool
-	// Sessions   *framework.SessionManager
+	Sessions       *framework.SessionManager
 	// youtube    *framework.Youtube
 	CmdHandler *framework.CommandHandler
 	PREFIX     string

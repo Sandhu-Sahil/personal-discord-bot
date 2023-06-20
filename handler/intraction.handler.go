@@ -2,62 +2,67 @@ package handler
 
 import (
 	"fmt"
+	"sandhu-sahil/bot/cmd"
+	"sandhu-sahil/bot/framework"
+	"sandhu-sahil/bot/variables"
 
 	"github.com/bwmarrin/discordgo"
 )
-
-var Commands = []*discordgo.ApplicationCommand{
-	{
-		Name:        "help",
-		Description: "Showcase of help command",
-		Type:        discordgo.ChatApplicationCommand,
-	},
-	{
-		Name:        "single-autocomplete",
-		Description: "Showcase of single autocomplete option",
-		Type:        discordgo.ChatApplicationCommand,
-		Options: []*discordgo.ApplicationCommandOption{
-			{
-				Name:         "autocomplete-option",
-				Description:  "Autocomplete option",
-				Type:         discordgo.ApplicationCommandOptionString,
-				Required:     true,
-				Autocomplete: true,
-			},
-		},
-	},
-	{
-		Name:        "multi-autocomplete",
-		Description: "Showcase of multiple autocomplete option",
-		Type:        discordgo.ChatApplicationCommand,
-		Options: []*discordgo.ApplicationCommandOption{
-			{
-				Name:         "autocomplete-option-1",
-				Description:  "Autocomplete option 1",
-				Type:         discordgo.ApplicationCommandOptionString,
-				Required:     true,
-				Autocomplete: true,
-			},
-			{
-				Name:         "autocomplete-option-2",
-				Description:  "Autocomplete option 2",
-				Type:         discordgo.ApplicationCommandOptionString,
-				Required:     true,
-				Autocomplete: true,
-			},
-		},
-	},
-}
 
 var IntractionHandlers = map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate){
 	"help": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
 		switch i.Type {
 		case discordgo.InteractionApplicationCommand:
+			res := cmd.HelpCommandIntractions()
 			err := s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 				Type: discordgo.InteractionResponseChannelMessageWithSource,
 				Data: &discordgo.InteractionResponseData{
 					Content: fmt.Sprintf(
-						"Help command response",
+						"%s",
+						res,
+					),
+				},
+			})
+			if err != nil {
+				panic(err)
+			}
+		}
+	},
+	"join": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
+		switch i.Type {
+		case discordgo.InteractionApplicationCommand:
+			ctx, err := framework.ExtractDataCreateContext(s, i, variables.Sessions)
+			if err != nil {
+				panic(err)
+			}
+			res := cmd.JoinCommandIntractions(ctx)
+			err = s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+				Type: discordgo.InteractionResponseChannelMessageWithSource,
+				Data: &discordgo.InteractionResponseData{
+					Content: fmt.Sprintf(
+						"%s",
+						res,
+					),
+				},
+			})
+			if err != nil {
+				panic(err)
+			}
+		}
+	},
+	"leave": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
+		switch i.Type {
+		case discordgo.InteractionApplicationCommand:
+			// res, err := cmd.LeaveCommandIntractions()
+			// if err != nil {
+			// 	panic(err)
+			// }
+			err := s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+				Type: discordgo.InteractionResponseChannelMessageWithSource,
+				Data: &discordgo.InteractionResponseData{
+					Content: fmt.Sprintf(
+						"%s",
+						"abc",
 					),
 				},
 			})
@@ -131,19 +136,21 @@ var IntractionHandlers = map[string]func(s *discordgo.Session, i *discordgo.Inte
 	"multi-autocomplete": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
 		switch i.Type {
 		case discordgo.InteractionApplicationCommand:
-			data := i.ApplicationCommandData()
-			err := s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
-				Type: discordgo.InteractionResponseChannelMessageWithSource,
-				Data: &discordgo.InteractionResponseData{
-					Content: fmt.Sprintf(
-						"Option 1: %s\nOption 2: %s",
-						data.Options[0].StringValue(),
-						data.Options[1].StringValue(),
-					),
-				},
-			})
-			if err != nil {
-				panic(err)
+			{
+				data := i.ApplicationCommandData()
+				err := s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+					Type: discordgo.InteractionResponseChannelMessageWithSource,
+					Data: &discordgo.InteractionResponseData{
+						Content: fmt.Sprintf(
+							"Option 1: %s\nOption 2: %s",
+							data.Options[0].StringValue(),
+							data.Options[1].StringValue(),
+						),
+					},
+				})
+				if err != nil {
+					panic(err)
+				}
 			}
 		case discordgo.InteractionApplicationCommandAutocomplete:
 			data := i.ApplicationCommandData()

@@ -1,53 +1,50 @@
 package handler
 
 import (
-	"fmt"
 	"sandhu-sahil/bot/cmd"
-	"sandhu-sahil/bot/framework"
 	"sandhu-sahil/bot/variables"
-	"strings"
 
 	"github.com/bwmarrin/discordgo"
 )
 
 func CommandHandler(session *discordgo.Session, message *discordgo.MessageCreate) {
-	user := message.Author
-	if user.ID == variables.BotID || user.Bot {
-		return
-	}
-	content := message.Content
-	if len(content) <= len(variables.PREFIX) {
-		return
-	}
-	if content[:len(variables.PREFIX)] != variables.PREFIX {
-		return
-	}
-	content = content[len(variables.PREFIX):]
-	if len(content) < 1 {
-		return
-	}
-	args := strings.Fields(content)
-	name := strings.ToLower(args[0])
-	command, found := variables.CmdHandler.Get(name)
-	if !found {
-		fmt.Println("Command not found,", name)
-		return
-	}
-	channel, err := session.Channel(message.ChannelID)
-	if err != nil {
-		fmt.Println("Error getting channel,", err)
-		return
-	}
-	guild, err := session.State.Guild(channel.GuildID)
-	if err != nil {
-		fmt.Println("Error getting guild,", err)
-		return
-	}
-	ctx := framework.NewContext(session, guild, channel, user, message, variables.CmdHandler) // Sessions, youtube
+	// user := message.Author
+	// if user.ID == variables.BotID || user.Bot {
+	// 	return
+	// }
+	// content := message.Content
+	// if len(content) <= len(variables.PREFIX) {
+	// 	return
+	// }
+	// if content[:len(variables.PREFIX)] != variables.PREFIX {
+	// 	return
+	// }
+	// content = content[len(variables.PREFIX):]
+	// if len(content) < 1 {
+	// 	return
+	// }
+	// args := strings.Fields(content)
+	// name := strings.ToLower(args[0])
+	// command, found := variables.CmdHandler.Get(name)
+	// if !found {
+	// 	fmt.Println("Command not found,", name)
+	// 	return
+	// }
+	// channel, err := session.Channel(message.ChannelID)
+	// if err != nil {
+	// 	fmt.Println("Error getting channel,", err)
+	// 	return
+	// }
+	// guild, err := session.State.Guild(channel.GuildID)
+	// if err != nil {
+	// 	fmt.Println("Error getting guild,", err)
+	// 	return
+	// }
+	// ctx := framework.NewContext(session, guild, channel, user) // Sessions, youtube
 
-	ctx.Args = args[1:]
-	c := *command
-	c(*ctx)
+	// ctx.Args = args[1:]
+	// c := *command
+	// c(*ctx)
 }
 
 func RegisterCommands() {
