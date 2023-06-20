@@ -136,7 +136,7 @@ func MessageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 			fmt.Print(err)
 		}
 	}
-	if strings.Contains(m.ContentWithMentionsReplaced(), `@Sahil Sandhu`) { // personal
+	if strings.Contains(m.ContentWithMentionsReplaced(), `@deathonn`) { // personal
 		_, err := s.ChannelMessageSend(m.ChannelID, "peo nu kato vaja marre janda")
 		if err != nil {
 			fmt.Print(err)
