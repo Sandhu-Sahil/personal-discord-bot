@@ -59,4 +59,8 @@ func HandleBot() {
 		log.Fatalf("Cannot open the session: %v", err)
 		return
 	}
+
+	// create a role for bot in new server
+	variables.Bot.AddHandler(handler.RoleTrigger)
+
 }
