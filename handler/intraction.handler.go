@@ -5,6 +5,7 @@ import (
 	"sandhu-sahil/bot/cmd"
 	"sandhu-sahil/bot/framework"
 	"sandhu-sahil/bot/variables"
+	"time"
 
 	"github.com/bwmarrin/discordgo"
 )
@@ -13,41 +14,43 @@ var IntractionHandlers = map[string]func(s *discordgo.Session, i *discordgo.Inte
 	"help": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
 		switch i.Type {
 		case discordgo.InteractionApplicationCommand:
-			res := cmd.HelpCommandIntractions()
 			err := s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
-				Type: discordgo.InteractionResponseChannelMessageWithSource,
-				Data: &discordgo.InteractionResponseData{
-					Content: fmt.Sprintf(
-						"%s",
-						res,
-					),
-				},
+				Type: discordgo.InteractionResponseDeferredChannelMessageWithSource,
 			})
 			if err != nil {
 				panic(err)
 			}
+			res := cmd.HelpCommandIntractions()
+			_, err = s.InteractionResponseEdit(i.Interaction, &discordgo.WebhookEdit{
+				Content: &res,
+			})
+			if err != nil {
+				panic(err)
+			}
+
 		}
 	},
 	"join": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
 		switch i.Type {
 		case discordgo.InteractionApplicationCommand:
+			err := s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+				Type: discordgo.InteractionResponseDeferredChannelMessageWithSource,
+			})
+			if err != nil {
+				panic(err)
+			}
 			ctx, err := framework.ExtractDataCreateContext(s, i, variables.Sessions)
 			if err != nil {
 				panic(err)
 			}
 			res := cmd.JoinCommandIntractions(ctx)
-			err = s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
-				Type: discordgo.InteractionResponseChannelMessageWithSource,
-				Data: &discordgo.InteractionResponseData{
-					Content: fmt.Sprintf(
-						"%s",
-						res,
-					),
-				},
+			_, err = s.InteractionResponseEdit(i.Interaction, &discordgo.WebhookEdit{
+				Content: &res,
 			})
 			if err != nil {
 				panic(err)
 			}
+
 		}
 	},
 	"leave": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
@@ -76,18 +79,31 @@ var IntractionHandlers = map[string]func(s *discordgo.Session, i *discordgo.Inte
 		case discordgo.InteractionApplicationCommand:
 			data := i.ApplicationCommandData()
 			err := s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
-				Type: discordgo.InteractionResponseChannelMessageWithSource,
-				Data: &discordgo.InteractionResponseData{
-					Content: fmt.Sprintf(
-						"You picked %q autocompletion",
-						// Autocompleted options do not affect usual flow of handling application command. They are ordinary options at this stage
-						data.Options[0].StringValue(),
-					),
-				},
+				Type: discordgo.InteractionResponseDeferredChannelMessageWithSource,
+				// Data: &discordgo.InteractionResponseData{
+				// 	Content: fmt.Sprintf(
+				// 		"Autocomplete result: %s",
+				// 		data.Options[0].StringValue(), // To get user input you just get value of the autocomplete option.
+				// 	),
+				// },
 			})
 			if err != nil {
 				panic(err)
 			}
+			time.Sleep(5 * time.Second) // Simulate some long operation
+			// now we can respond with a message
+			res := fmt.Sprintf(
+				"Autocomplete result: %s",
+				data.Options[0].StringValue(), // To get user input you just get value of the autocomplete option.
+			)
+			_, err = s.InteractionResponseEdit(i.Interaction, &discordgo.WebhookEdit{
+				Content: &res,
+				// To get user input you just get value of the autocomplete option.
+			})
+			if err != nil {
+				panic(err)
+			}
+
 		// Autocomplete options introduce a new interaction type (8) for returning custom autocomplete results.
 		case discordgo.InteractionApplicationCommandAutocomplete:
 			data := i.ApplicationCommandData()

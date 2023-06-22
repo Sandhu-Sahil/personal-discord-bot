@@ -4,7 +4,7 @@ just for fun
 # example of .env file
 ```
 MyToken=
-PREFIX=?
+PREFIX=
 OWNER_ID=
 GUILD_ID=
 REMOVE_COMMANDS=

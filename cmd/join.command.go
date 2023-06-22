@@ -10,12 +10,12 @@ func JoinCommandIntractions(ctx *framework.Context) string {
 	if vc == nil {
 		return "You must be in a voice channel to use the bot!"
 	}
-	_, err := ctx.Sessions.Join(ctx.Discord, ctx.Guild.ID, vc.ID, framework.JoinProperties{
+	sess, err := ctx.Sessions.Join(ctx.Discord, ctx.Guild.ID, vc.ID, framework.JoinProperties{
 		Muted:    false,
 		Deafened: true,
 	})
 	if err != nil {
 		return "An error occured at the time of joining! Please try again later "
 	}
-	return "Joined !"
+	return "Joined <#" + sess.ChannelId + ">!"
 }
