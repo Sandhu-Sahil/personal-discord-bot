@@ -56,22 +56,24 @@ var IntractionHandlers = map[string]func(s *discordgo.Session, i *discordgo.Inte
 	"leave": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
 		switch i.Type {
 		case discordgo.InteractionApplicationCommand:
-			// res, err := cmd.LeaveCommandIntractions()
-			// if err != nil {
-			// 	panic(err)
-			// }
 			err := s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
-				Type: discordgo.InteractionResponseChannelMessageWithSource,
-				Data: &discordgo.InteractionResponseData{
-					Content: fmt.Sprintf(
-						"%s",
-						"abc",
-					),
-				},
+				Type: discordgo.InteractionResponseDeferredChannelMessageWithSource,
 			})
 			if err != nil {
 				panic(err)
 			}
+			ctx, err := framework.ExtractDataCreateContext(s, i, variables.Sessions)
+			if err != nil {
+				panic(err)
+			}
+			res := cmd.LeaveCommandIntractions(ctx)
+			_, err = s.InteractionResponseEdit(i.Interaction, &discordgo.WebhookEdit{
+				Content: &res,
+			})
+			if err != nil {
+				panic(err)
+			}
+
 		}
 	},
 	"single-autocomplete": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
