@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/bwmarrin/discordgo"
@@ -20,7 +21,16 @@ func RoleTrigger(s *discordgo.Session, event *discordgo.GuildCreate) {
 	// if the bot doesn't have administrator permissions create a role without administrator permissions
 	if permissions&discordgo.PermissionAdministrator == 0 {
 		// instead of returning send message to the server system channel
-		s.ChannelMessageSend(event.Guild.SystemChannelID, "I don't have administrator permissions in this server. Please give me administrator permissions so that I can create a role for myself.")
+		_, err = s.ChannelMessageSend(event.Guild.SystemChannelID, "I don't have administrator permissions in this server. Please give me administrator permissions so that I can create a role for myself.")
+		if err != nil {
+			fmt.Println("Failed to send message to the system channel")
+			// send message to the first channel of the server
+			_, err = s.ChannelMessageSend(event.Guild.Channels[0].ID, "I don't have administrator permissions in this server. Please give me administrator permissions so that I can create a role for myself.")
+			if err != nil {
+				log.Fatalf("Failed to send message to the first channel of the server: %v", err)
+				return
+			}
+		}
 	} else {
 		guildID := event.Guild.ID
 
