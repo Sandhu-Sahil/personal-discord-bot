@@ -7,56 +7,72 @@ import (
 )
 
 func RoleTrigger(s *discordgo.Session, event *discordgo.GuildCreate) {
-	guildID := event.Guild.ID
-
-	// Create the role
-	roles, err := s.GuildRoles(guildID)
+	// check if the bot has the correct permissions
+	permissions, err := s.UserChannelPermissions(s.State.User.ID, event.Guild.SystemChannelID)
 	if err != nil {
-		log.Fatalf("Failed to create role: %v", err)
-		return
-	}
-
-	// Find the role
-	var role *discordgo.Role
-	for _, r := range roles {
-		if r.Name == "Sandhu Saab" {
-			role = r
-			break
+		permissions, err = s.UserChannelPermissions(s.State.User.ID, event.Guild.Channels[0].ID)
+		if err != nil {
+			log.Fatalf("Failed to get channel permissions in %s: %v", event.Guild.Name, err)
+			return
 		}
 	}
 
-	// Create a new role if it doesn't exist
-	if role == nil {
-		role, err = s.GuildRoleCreate(guildID, &discordgo.RoleParams{})
+	// if the bot doesn't have administrator permissions create a role without administrator permissions
+	if permissions&discordgo.PermissionAdministrator == 0 {
+		// instead of returning send message to the server system channel
+		s.ChannelMessageSend(event.Guild.SystemChannelID, "I don't have administrator permissions in this server. Please give me administrator permissions so that I can create a role for myself.")
+	} else {
+		guildID := event.Guild.ID
+
+		// Create the role
+		roles, err := s.GuildRoles(guildID)
 		if err != nil {
 			log.Fatalf("Failed to create role: %v", err)
 			return
 		}
-		// Customize the role
-		role.Name = "Sandhu Saab"
-		role.Permissions = discordgo.PermissionAdministrator // Set desired permissions
-		role.Color = 0x89CFF0                                // Set desired color
-		role.Hoist = true                                    // Show users with this role separately in the sidebar
-		role.Mentionable = true                              // Allow anyone to mention this role
-	}
 
-	// Update the role with customized settings
-	_, err = s.GuildRoleEdit(guildID, role.ID, &discordgo.RoleParams{
-		Name:        role.Name,
-		Permissions: &role.Permissions,
-		Color:       &role.Color,
-		Hoist:       &role.Hoist,
-		Mentionable: &role.Mentionable,
-	})
-	if err != nil {
-		log.Fatalf("Failed to update role: %v", err)
-		return
-	}
+		// Find the role
+		var role *discordgo.Role
+		for _, r := range roles {
+			if r.Name == "Sandhu Saab" {
+				role = r
+				break
+			}
+		}
 
-	// Add the role to the bot
-	err = s.GuildMemberRoleAdd(guildID, s.State.User.ID, role.ID)
-	if err != nil {
-		log.Fatalf("Failed to add role to bot: %v", err)
-		return
+		// Create a new role if it doesn't exist
+		if role == nil {
+			role, err = s.GuildRoleCreate(guildID, &discordgo.RoleParams{})
+			if err != nil {
+				log.Fatalf("Failed to create role in %s: %v", event.Guild.Name, err)
+				return
+			}
+			// Customize the role
+			role.Name = "Sandhu Saab"
+			role.Permissions = discordgo.PermissionAdministrator // Set desired permissions
+			role.Color = 0x89CFF0                                // Set desired color
+			role.Hoist = true                                    // Show users with this role separately in the sidebar
+			role.Mentionable = true                              // Allow anyone to mention this role
+		}
+
+		// Update the role with customized settings
+		_, err = s.GuildRoleEdit(guildID, role.ID, &discordgo.RoleParams{
+			Name:        role.Name,
+			Permissions: &role.Permissions,
+			Color:       &role.Color,
+			Hoist:       &role.Hoist,
+			Mentionable: &role.Mentionable,
+		})
+		if err != nil {
+			log.Fatalf("Failed to update role: %v", err)
+			return
+		}
+
+		// Add the role to the bot
+		err = s.GuildMemberRoleAdd(guildID, s.State.User.ID, role.ID)
+		if err != nil {
+			log.Fatalf("Failed to add role to bot: %v", err)
+			return
+		}
 	}
 }
