@@ -19,6 +19,11 @@ var Commands = []*discordgo.ApplicationCommand{
 		Type:        discordgo.ChatApplicationCommand,
 	},
 	{
+		Name:        "invite",
+		Description: "Invite the bot to your server",
+		Type:        discordgo.ChatApplicationCommand,
+	},
+	{
 		Name:        "support",
 		Description: "Showcase of support server link",
 		Type:        discordgo.ChatApplicationCommand,
