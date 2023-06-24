@@ -19,6 +19,11 @@ var Commands = []*discordgo.ApplicationCommand{
 		Type:        discordgo.ChatApplicationCommand,
 	},
 	{
+		Name:        "support",
+		Description: "Showcase of support server link",
+		Type:        discordgo.ChatApplicationCommand,
+	},
+	{
 		Name:        "single-autocomplete",
 		Description: "Showcase of single autocomplete option",
 		Type:        discordgo.ChatApplicationCommand,

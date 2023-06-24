@@ -31,7 +31,7 @@ func main() {
 
 	if variables.RemoveCommands {
 		for _, cmd := range variables.CreatedCommands {
-			err := variables.Bot.ApplicationCommandDelete(variables.BotID, variables.GuildID, cmd.ID)
+			err := variables.Bot.ApplicationCommandDelete(variables.BotID, "", cmd.ID)
 			if err != nil {
 				log.Fatalf("Cannot delete %q command: %v", cmd.Name, err)
 			}

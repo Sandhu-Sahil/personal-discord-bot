@@ -3,10 +3,10 @@ just for fun
 
 # example of .env file
 ```
-MyToken=
-PREFIX=
-OWNER_ID=
-GUILD_ID=
-REMOVE_COMMANDS=
-DEFAULT_STATUS=
+MyToken=            <token of your bot>
+PREFIX=             <prefix if wanna use prefix commands>
+OWNER_ID=           <your discord id>
+GUILD_ID=           <bot's support server guild id>
+REMOVE_COMMANDS=    <true or false>
+DEFAULT_STATUS=     <text status of bot profile>
 ```
