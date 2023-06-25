@@ -49,7 +49,7 @@ func HandleBot() {
 			h(s, i)
 		}
 	})
-	variables.CreatedCommands, err = variables.Bot.ApplicationCommandBulkOverwrite(variables.BotID, "", handler.Commands)
+	variables.CreatedCommands, err = variables.Bot.ApplicationCommandBulkOverwrite(variables.BotID, "", handler.Commands) // if guildID is empty "", it will create global commands
 	if err != nil {
 		log.Fatalf("Cannot register commands: %v", err)
 	}
