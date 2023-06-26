@@ -16,8 +16,7 @@ type Context struct {
 
 	// dependency injection?
 	// Conf       *Config
-	CmdHandler *CommandHandler
-	Sessions   *SessionManager
+	Sessions *SessionManager
 	// Youtube    *Youtube
 }
 

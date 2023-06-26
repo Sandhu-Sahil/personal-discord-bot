@@ -17,9 +17,7 @@ func HandleBot() {
 
 	handler.StartBot()
 
-	variables.CmdHandler = framework.NewCommandHandler()
 	variables.Sessions = framework.NewSessionManager()
-	handler.RegisterCommands()
 
 	// if variables.UseSharding {
 	// 	variables.Bot.ShardID = variables.ShardId

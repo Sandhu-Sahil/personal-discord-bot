@@ -14,7 +14,6 @@ var (
 	RemoveCommands bool
 	Sessions       *framework.SessionManager
 	// youtube    *framework.Youtube
-	CmdHandler *framework.CommandHandler
 	PREFIX     string
 	ServiceUrl string
 	OwnerId    string

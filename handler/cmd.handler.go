@@ -1,9 +1,6 @@
 package handler
 
 import (
-	"sandhu-sahil/bot/cmd"
-	"sandhu-sahil/bot/variables"
-
 	"github.com/bwmarrin/discordgo"
 )
 
@@ -50,7 +47,7 @@ func CommandHandler(session *discordgo.Session, message *discordgo.MessageCreate
 func RegisterCommands() {
 	// ??? means I haven't dug in
 	// TODO: Consistant order?
-	variables.CmdHandler.Register("help", cmd.HelpCommand, "Gives you this help message!")
+	// variables.CmdHandler.Register("help", cmd.HelpCommand, "Gives you this help message!")
 	// variables.CmdHandler.Register("admin", cmd.AdminCommand, "???")
 	// variables.CmdHandler.Register("join", cmd.JoinCommand, "Join a voice channel !join attic")
 	// variables.CmdHandler.Register("leave", cmd.LeaveCommand, "Leaves current voice channel")

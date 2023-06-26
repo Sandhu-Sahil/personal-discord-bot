@@ -76,6 +76,48 @@ var IntractionHandlers = map[string]func(s *discordgo.Session, i *discordgo.Inte
 
 		}
 	},
+	"admin": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
+		switch i.Type {
+		case discordgo.InteractionApplicationCommand:
+			err := s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+				Type: discordgo.InteractionResponseDeferredChannelMessageWithSource,
+			})
+			if err != nil {
+				panic(err)
+			}
+			res := cmd.AdminCommandIntractions(s, i)
+			_, err = s.InteractionResponseEdit(i.Interaction, &discordgo.WebhookEdit{
+				Content: &res,
+			})
+			if err != nil {
+				panic(err)
+			}
+
+		}
+	},
+	"info": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
+		switch i.Type {
+		case discordgo.InteractionApplicationCommand:
+			err := s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+				Type: discordgo.InteractionResponseDeferredChannelMessageWithSource,
+			})
+			if err != nil {
+				panic(err)
+			}
+			ctx, err := framework.ExtractDataCreateContext(s, i, variables.Sessions)
+			if err != nil {
+				panic(err)
+			}
+			res := cmd.InfoCommandIntractions(ctx)
+			_, err = s.InteractionResponseEdit(i.Interaction, &discordgo.WebhookEdit{
+				Content: &res,
+			})
+			if err != nil {
+				panic(err)
+			}
+
+		}
+	},
 	"invite": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
 		switch i.Type {
 		case discordgo.InteractionApplicationCommand:

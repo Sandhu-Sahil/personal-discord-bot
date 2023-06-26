@@ -63,12 +63,11 @@ func (manager *SessionManager) Join(discord *discordgo.Session, guildId, channel
 		return nil, err
 	}
 	sess := newSession(guildId, channelId, NewConnection(vc))
-	manager.sessions[channelId] = sess
+	manager.sessions[channelId] = sess //string is specific to the channelID
 	return sess, nil
 }
 
 func (manager *SessionManager) Leave(discord *discordgo.Session, session Session) {
-	// session.connection.Stop()
 	session.connection.Disconnect()
-	delete(manager.sessions, session.ChannelId)
+	delete(manager.sessions, session.ChannelId) //string is specific to the channelID
 }
