@@ -6,7 +6,7 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-func ExtractDataCreateContext(s *discordgo.Session, i *discordgo.InteractionCreate, session *SessionManager) (ctx *Context, err error) {
+func ExtractDataCreateContext(s *discordgo.Session, i *discordgo.InteractionCreate, session *SessionManager, keyYoutube string) (ctx *Context, err error) {
 	channel, err := s.Channel(i.ChannelID)
 	if err != nil {
 		fmt.Println("Error getting channel,", err)
@@ -22,6 +22,7 @@ func ExtractDataCreateContext(s *discordgo.Session, i *discordgo.InteractionCrea
 		fmt.Println("Error getting user,", err)
 		return nil, err
 	}
-	ctx = NewContext(s, guild, channel, user, session)
+	youtube := NewYoutube(keyYoutube)
+	ctx = NewContext(s, guild, channel, user, session, youtube)
 	return ctx, nil
 }

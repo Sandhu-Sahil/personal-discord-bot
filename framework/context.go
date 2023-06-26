@@ -13,25 +13,19 @@ type Context struct {
 	TextChannel  *discordgo.Channel
 	User         *discordgo.User
 	Args         []string
-
-	// dependency injection?
-	// Conf       *Config
-	Sessions *SessionManager
-	// Youtube    *Youtube
+	Sessions     *SessionManager
+	Youtube      *Youtube
 }
 
-func NewContext(discord *discordgo.Session, guild *discordgo.Guild, textChannel *discordgo.Channel, user *discordgo.User, sessions *SessionManager, //youtube *Youtube
+func NewContext(discord *discordgo.Session, guild *discordgo.Guild, textChannel *discordgo.Channel, user *discordgo.User, sessions *SessionManager, youtube *Youtube,
 ) *Context {
 	ctx := new(Context)
 	ctx.Discord = discord
 	ctx.Guild = guild
 	ctx.TextChannel = textChannel
 	ctx.User = user
-	// ctx.Message = message
-	// ctx.Conf = conf
-	// ctx.CmdHandler = cmdHandler
 	ctx.Sessions = sessions
-	// ctx.Youtube = youtube
+	ctx.Youtube = youtube
 	return ctx
 }
 

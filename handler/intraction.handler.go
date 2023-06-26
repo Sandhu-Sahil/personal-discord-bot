@@ -39,7 +39,7 @@ var IntractionHandlers = map[string]func(s *discordgo.Session, i *discordgo.Inte
 			if err != nil {
 				panic(err)
 			}
-			ctx, err := framework.ExtractDataCreateContext(s, i, variables.Sessions)
+			ctx, err := framework.ExtractDataCreateContext(s, i, variables.Sessions, variables.YoutubeApiKey)
 			if err != nil {
 				panic(err)
 			}
@@ -62,7 +62,7 @@ var IntractionHandlers = map[string]func(s *discordgo.Session, i *discordgo.Inte
 			if err != nil {
 				panic(err)
 			}
-			ctx, err := framework.ExtractDataCreateContext(s, i, variables.Sessions)
+			ctx, err := framework.ExtractDataCreateContext(s, i, variables.Sessions, variables.YoutubeApiKey)
 			if err != nil {
 				panic(err)
 			}
@@ -75,6 +75,61 @@ var IntractionHandlers = map[string]func(s *discordgo.Session, i *discordgo.Inte
 			}
 
 		}
+	},
+	"youtube": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
+		switch i.Type {
+		case discordgo.InteractionApplicationCommand:
+			err := s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+				Type: discordgo.InteractionResponseDeferredChannelMessageWithSource,
+			})
+			if err != nil {
+				panic(err)
+			}
+			ctx, err := framework.ExtractDataCreateContext(s, i, variables.Sessions, variables.YoutubeApiKey)
+			if err != nil {
+				panic(err)
+			}
+			res := cmd.YoutubeCommandIntractions(ctx, i.ApplicationCommandData().Options[0].StringValue())
+			_, err = s.InteractionResponseEdit(i.Interaction, &discordgo.WebhookEdit{
+				Content: &res,
+			})
+			if err != nil {
+				panic(err)
+			}
+		case discordgo.InteractionApplicationCommandAutocomplete:
+			data := i.ApplicationCommandData()
+			choices := []*discordgo.ApplicationCommandOptionChoice{
+				{
+					Name:  "search",
+					Value: "search",
+				},
+			}
+
+			if data.Options[0].StringValue() != "" {
+				callres := cmd.YoutubeCommandPreIntractions(variables.YoutubeService, data.Options[0].StringValue())
+				fmt.Println(callres)
+				if callres != nil {
+					for id, title := range callres {
+						choices = append(choices, &discordgo.ApplicationCommandOptionChoice{
+							Name:  title,
+							Value: id,
+						})
+					}
+				}
+				fmt.Println(choices)
+			}
+
+			err := s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+				Type: discordgo.InteractionApplicationCommandAutocompleteResult,
+				Data: &discordgo.InteractionResponseData{
+					Choices: choices, // This is basically the whole purpose of autocomplete interaction - return custom options to the user.
+				},
+			})
+			if err != nil {
+				panic(err)
+			}
+		}
+
 	},
 	"admin": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
 		switch i.Type {
@@ -104,7 +159,7 @@ var IntractionHandlers = map[string]func(s *discordgo.Session, i *discordgo.Inte
 			if err != nil {
 				panic(err)
 			}
-			ctx, err := framework.ExtractDataCreateContext(s, i, variables.Sessions)
+			ctx, err := framework.ExtractDataCreateContext(s, i, variables.Sessions, variables.YoutubeApiKey)
 			if err != nil {
 				panic(err)
 			}

@@ -19,6 +19,20 @@ var Commands = []*discordgo.ApplicationCommand{
 		Type:        discordgo.ChatApplicationCommand,
 	},
 	{
+		Name:        "youtube",
+		Description: "Play youtube video",
+		Type:        discordgo.ChatApplicationCommand,
+		Options: []*discordgo.ApplicationCommandOption{
+			{
+				Name:         "query",
+				Description:  "Youtube search query",
+				Type:         discordgo.ApplicationCommandOptionString,
+				Required:     true,
+				Autocomplete: true,
+			},
+		},
+	},
+	{
 		Name:        "admin",
 		Description: "Admin only commands",
 		Type:        discordgo.ChatApplicationCommand,

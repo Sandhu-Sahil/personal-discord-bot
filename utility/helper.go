@@ -17,6 +17,8 @@ func HandleBot() {
 
 	handler.StartBot()
 
+	handler.StartYoutubeClient()
+
 	variables.Sessions = framework.NewSessionManager()
 
 	// if variables.UseSharding {

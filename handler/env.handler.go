@@ -22,6 +22,7 @@ func LoadEnv() {
 	// variables.ShardId = 0
 	// variables.ShardCount = 1
 
+	variables.YoutubeApiKey = os.Getenv("DEVELOPER_KEY")
 	variables.GuildID = os.Getenv("GUILD_ID")
 	variables.DefaultStatus = os.Getenv("DEFAULT_STATUS")
 	variables.RemoveCommands = os.Getenv("REMOVE_COMMANDS") == "true"
