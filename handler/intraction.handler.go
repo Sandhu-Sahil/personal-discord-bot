@@ -89,41 +89,13 @@ var IntractionHandlers = map[string]func(s *discordgo.Session, i *discordgo.Inte
 			if err != nil {
 				panic(err)
 			}
-			res := cmd.YoutubeCommandIntractions(ctx, i.ApplicationCommandData().Options[0].StringValue())
-			_, err = s.InteractionResponseEdit(i.Interaction, &discordgo.WebhookEdit{
-				Content: &res,
-			})
+			data, err := cmd.YoutubeCommandPreIntractions(variables.YoutubeService, i.ApplicationCommandData().Options[0].StringValue())
 			if err != nil {
 				panic(err)
 			}
-		case discordgo.InteractionApplicationCommandAutocomplete:
-			data := i.ApplicationCommandData()
-			choices := []*discordgo.ApplicationCommandOptionChoice{
-				{
-					Name:  "search",
-					Value: "search",
-				},
-			}
-
-			if data.Options[0].StringValue() != "" {
-				callres := cmd.YoutubeCommandPreIntractions(variables.YoutubeService, data.Options[0].StringValue())
-				fmt.Println(callres)
-				if callres != nil {
-					for id, title := range callres {
-						choices = append(choices, &discordgo.ApplicationCommandOptionChoice{
-							Name:  title,
-							Value: id,
-						})
-					}
-				}
-				fmt.Println(choices)
-			}
-
-			err := s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
-				Type: discordgo.InteractionApplicationCommandAutocompleteResult,
-				Data: &discordgo.InteractionResponseData{
-					Choices: choices, // This is basically the whole purpose of autocomplete interaction - return custom options to the user.
-				},
+			res := cmd.YoutubeCommandIntractions(ctx, data)
+			_, err = s.InteractionResponseEdit(i.Interaction, &discordgo.WebhookEdit{
+				Content: &res,
 			})
 			if err != nil {
 				panic(err)

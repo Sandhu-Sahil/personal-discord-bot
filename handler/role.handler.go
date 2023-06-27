@@ -2,7 +2,6 @@ package handler
 
 import (
 	"fmt"
-	"log"
 
 	"github.com/bwmarrin/discordgo"
 )
@@ -13,7 +12,7 @@ func RoleTrigger(s *discordgo.Session, event *discordgo.GuildCreate) {
 	if err != nil {
 		permissions, err = s.UserChannelPermissions(s.State.User.ID, event.Guild.Channels[0].ID)
 		if err != nil {
-			log.Fatalf("Failed to get channel permissions in %s: %v", event.Guild.Name, err)
+			fmt.Printf("Failed to get channel permissions in %s: %v", event.Guild.Name, err)
 			return
 		}
 	}
@@ -27,7 +26,7 @@ func RoleTrigger(s *discordgo.Session, event *discordgo.GuildCreate) {
 			// send message to the first channel of the server
 			_, err = s.ChannelMessageSend(event.Guild.Channels[0].ID, "I don't have administrator permissions in this server. Please give me administrator permissions so that I can create a role for myself.")
 			if err != nil {
-				log.Fatalf("Failed to send message to the first channel of the server: %v", err)
+				fmt.Printf("Failed to send message to the first channel of the server: %v", err)
 				return
 			}
 		}
@@ -37,7 +36,7 @@ func RoleTrigger(s *discordgo.Session, event *discordgo.GuildCreate) {
 		// Create the role
 		roles, err := s.GuildRoles(guildID)
 		if err != nil {
-			log.Fatalf("Failed to create role: %v", err)
+			fmt.Printf("Failed to create role: %v", err)
 			return
 		}
 
@@ -54,7 +53,7 @@ func RoleTrigger(s *discordgo.Session, event *discordgo.GuildCreate) {
 		if role == nil {
 			role, err = s.GuildRoleCreate(guildID, &discordgo.RoleParams{})
 			if err != nil {
-				log.Fatalf("Failed to create role in %s: %v", event.Guild.Name, err)
+				fmt.Printf("Failed to create role in %s: %v", event.Guild.Name, err)
 				return
 			}
 			// Customize the role
@@ -74,14 +73,14 @@ func RoleTrigger(s *discordgo.Session, event *discordgo.GuildCreate) {
 			Mentionable: &role.Mentionable,
 		})
 		if err != nil {
-			log.Fatalf("Failed to update role: %v", err)
+			fmt.Printf("Failed to update role: %v", err)
 			return
 		}
 
 		// Add the role to the bot
 		err = s.GuildMemberRoleAdd(guildID, s.State.User.ID, role.ID)
 		if err != nil {
-			log.Fatalf("Failed to add role to bot: %v", err)
+			fmt.Printf("Failed to add role to bot: %v", err)
 			return
 		}
 	}

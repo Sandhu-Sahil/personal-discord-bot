@@ -36,7 +36,6 @@ func HandleBot() {
 	// this same as setting up Intents in the bot
 
 	// command handler
-	variables.Bot.AddHandler(handler.CommandHandler)
 	variables.Bot.AddHandler(func(discord *discordgo.Session, ready *discordgo.Ready) {
 		discord.UpdateWatchStatus(0, variables.DefaultStatus)
 		guilds := discord.State.Guilds

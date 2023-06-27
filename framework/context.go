@@ -1,8 +1,6 @@
 package framework
 
 import (
-	"fmt"
-
 	"github.com/bwmarrin/discordgo"
 )
 
@@ -27,15 +25,6 @@ func NewContext(discord *discordgo.Session, guild *discordgo.Guild, textChannel 
 	ctx.Sessions = sessions
 	ctx.Youtube = youtube
 	return ctx
-}
-
-func (ctx Context) Reply(content string) *discordgo.Message {
-	msg, err := ctx.Discord.ChannelMessageSend(ctx.TextChannel.ID, content)
-	if err != nil {
-		fmt.Println("Error whilst sending message,", err)
-		return nil
-	}
-	return msg
 }
 
 func (ctx *Context) GetVoiceChannel() *discordgo.Channel {

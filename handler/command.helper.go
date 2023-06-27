@@ -24,11 +24,10 @@ var Commands = []*discordgo.ApplicationCommand{
 		Type:        discordgo.ChatApplicationCommand,
 		Options: []*discordgo.ApplicationCommandOption{
 			{
-				Name:         "query",
-				Description:  "Youtube search query",
-				Type:         discordgo.ApplicationCommandOptionString,
-				Required:     true,
-				Autocomplete: true,
+				Name:        "search",
+				Description: "Youtube search query",
+				Type:        discordgo.ApplicationCommandOptionString,
+				Required:    true,
 			},
 		},
 	},
