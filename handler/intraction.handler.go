@@ -14,6 +14,7 @@ var IntractionHandlers = map[string]func(s *discordgo.Session, i *discordgo.Inte
 	"help": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
 		switch i.Type {
 		case discordgo.InteractionApplicationCommand:
+			defer BotPanicHandler(s, i)
 			err := s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 				Type: discordgo.InteractionResponseDeferredChannelMessageWithSource,
 			})
@@ -33,6 +34,7 @@ var IntractionHandlers = map[string]func(s *discordgo.Session, i *discordgo.Inte
 	"join": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
 		switch i.Type {
 		case discordgo.InteractionApplicationCommand:
+			defer BotPanicHandler(s, i)
 			err := s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 				Type: discordgo.InteractionResponseDeferredChannelMessageWithSource,
 			})
@@ -56,6 +58,7 @@ var IntractionHandlers = map[string]func(s *discordgo.Session, i *discordgo.Inte
 	"leave": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
 		switch i.Type {
 		case discordgo.InteractionApplicationCommand:
+			defer BotPanicHandler(s, i)
 			err := s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 				Type: discordgo.InteractionResponseDeferredChannelMessageWithSource,
 			})
@@ -79,6 +82,7 @@ var IntractionHandlers = map[string]func(s *discordgo.Session, i *discordgo.Inte
 	"youtube": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
 		switch i.Type {
 		case discordgo.InteractionApplicationCommand:
+			defer BotPanicHandler(s, i)
 			err := s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 				Type: discordgo.InteractionResponseDeferredChannelMessageWithSource,
 			})
@@ -108,6 +112,7 @@ var IntractionHandlers = map[string]func(s *discordgo.Session, i *discordgo.Inte
 	"admin": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
 		switch i.Type {
 		case discordgo.InteractionApplicationCommand:
+			defer BotPanicHandler(s, i)
 			err := s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 				Type: discordgo.InteractionResponseDeferredChannelMessageWithSource,
 			})
@@ -127,6 +132,7 @@ var IntractionHandlers = map[string]func(s *discordgo.Session, i *discordgo.Inte
 	"info": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
 		switch i.Type {
 		case discordgo.InteractionApplicationCommand:
+			defer BotPanicHandler(s, i)
 			err := s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 				Type: discordgo.InteractionResponseDeferredChannelMessageWithSource,
 			})
@@ -150,6 +156,7 @@ var IntractionHandlers = map[string]func(s *discordgo.Session, i *discordgo.Inte
 	"invite": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
 		switch i.Type {
 		case discordgo.InteractionApplicationCommand:
+			defer BotPanicHandler(s, i)
 			err := s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 				Type: discordgo.InteractionResponseDeferredChannelMessageWithSource,
 			})
@@ -169,6 +176,7 @@ var IntractionHandlers = map[string]func(s *discordgo.Session, i *discordgo.Inte
 	"support": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
 		switch i.Type {
 		case discordgo.InteractionApplicationCommand:
+			defer BotPanicHandler(s, i)
 			err := s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 				Type: discordgo.InteractionResponseDeferredChannelMessageWithSource,
 			})
@@ -188,6 +196,8 @@ var IntractionHandlers = map[string]func(s *discordgo.Session, i *discordgo.Inte
 	"single-autocomplete": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
 		switch i.Type {
 		case discordgo.InteractionApplicationCommand:
+			defer BotPanicHandler(s, i)
+
 			data := i.ApplicationCommandData()
 			err := s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 				Type: discordgo.InteractionResponseDeferredChannelMessageWithSource,
@@ -217,6 +227,8 @@ var IntractionHandlers = map[string]func(s *discordgo.Session, i *discordgo.Inte
 
 		// Autocomplete options introduce a new interaction type (8) for returning custom autocomplete results.
 		case discordgo.InteractionApplicationCommandAutocomplete:
+			defer BotPanicHandler(s, i)
+
 			data := i.ApplicationCommandData()
 			choices := []*discordgo.ApplicationCommandOptionChoice{
 				{
@@ -264,6 +276,8 @@ var IntractionHandlers = map[string]func(s *discordgo.Session, i *discordgo.Inte
 		switch i.Type {
 		case discordgo.InteractionApplicationCommand:
 			{
+				defer BotPanicHandler(s, i)
+
 				data := i.ApplicationCommandData()
 				err := s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 					Type: discordgo.InteractionResponseChannelMessageWithSource,
@@ -280,6 +294,8 @@ var IntractionHandlers = map[string]func(s *discordgo.Session, i *discordgo.Inte
 				}
 			}
 		case discordgo.InteractionApplicationCommandAutocomplete:
+			defer BotPanicHandler(s, i)
+
 			data := i.ApplicationCommandData()
 			var choices []*discordgo.ApplicationCommandOptionChoice
 			switch {

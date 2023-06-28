@@ -42,7 +42,7 @@ func InfoCommandIntractions(ctx *framework.Context) string {
 	buffer.WriteString("owner username: " + *userString)
 	buffer.WriteString("\ngo version: " + runtime.Version())
 	buffer.WriteString("\ndiscordgo version: " + discordgo.VERSION)
-	buffer.WriteString("\nuptime: " + getDurationString(time.Now().Sub(startTime)))
+	buffer.WriteString("\nuptime: " + getDurationString(time.Since(startTime)))
 	buffer.WriteString(fmt.Sprintf("\nmemory used: %s / %s (%s garbage collected)", humanize.Bytes(stats.Alloc),
 		humanize.Bytes(stats.Sys), humanize.Bytes(stats.TotalAlloc)))
 	buffer.WriteString("\nconcurrent tasks: " + strconv.Itoa(runtime.NumGoroutine()))
