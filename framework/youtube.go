@@ -1,9 +1,9 @@
 package framework
 
 import (
-	"encoding/json"
-	"net/http"
-	"net/url"
+	"errors"
+
+	"google.golang.org/api/youtube/v3"
 )
 
 const (
@@ -35,20 +35,56 @@ type (
 		Description  string `json:"description"`
 		ChannelTitle string `json:"channel_title"`
 		Duration     string `json:"duration"`
-	}
-
-	ytApiResponse struct {
-		Error   bool              `json:"error"`
-		Content []YTSearchContent `json:"content"`
+		Thumbnail    *youtube.Thumbnail
 	}
 
 	Youtube struct {
 		ApiKey string
+		Search *YTSearchContent
 	}
 )
 
 func NewYoutube(apiKey string) *Youtube {
-	return &Youtube{apiKey}
+	return &Youtube{
+		ApiKey: apiKey,
+		Search: &YTSearchContent{},
+	}
+}
+
+func (y Youtube) SearchYoutube(client *youtube.Service, query string) error {
+	list := []string{"id", "snippet"}
+
+	// Make the API call to YouTube.
+	call := client.Search.List(list).Order("relevance").Q(query).MaxResults(1)
+	response, err := call.Do()
+	if err != nil {
+		return err
+	}
+
+	var item *youtube.SearchResult
+	// Iterate through each item and add it to the correct list.
+	for _, search := range response.Items {
+		switch search.Id.Kind {
+		case "youtube#video":
+			if search.Snippet.LiveBroadcastContent == "live" {
+				continue
+			}
+			item = search
+		}
+	}
+
+	if item == nil {
+		// return not found anything
+		return errors.New("sorry didn't found anything on youtube")
+	}
+
+	y.Search.Id = item.Id.VideoId
+	y.Search.Title = item.Snippet.Title
+	y.Search.ChannelTitle = item.Snippet.ChannelTitle
+	y.Search.Thumbnail = item.Snippet.Thumbnails.High
+	y.Search.Description = item.Snippet.Description
+
+	return nil
 }
 
 // func (youtube Youtube) getType(input string) int {
@@ -115,30 +151,3 @@ func NewYoutube(apiKey string) *Youtube {
 	u := resp.Formats[0].Url
 	return &VideoResult{u, resp.Title}, nil
 }*/
-
-func (youtube Youtube) buildUrl(query string) (*string, error) {
-	base := youtube.ApiKey + "/v1/youtube/search"
-	address, err := url.Parse(base)
-	if err != nil {
-		return nil, err
-	}
-	params := url.Values{}
-	params.Add("search", query)
-	address.RawQuery = params.Encode()
-	str := address.String()
-	return &str, nil
-}
-
-func (youtube Youtube) Search(query string) ([]YTSearchContent, error) {
-	addr, err := youtube.buildUrl(query)
-	if err != nil {
-		return nil, err
-	}
-	resp, err := http.Get(*addr)
-	if err != nil {
-		return nil, err
-	}
-	var apiResp ytApiResponse
-	json.NewDecoder(resp.Body).Decode(&apiResp)
-	return apiResp.Content, nil
-}

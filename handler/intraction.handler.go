@@ -89,14 +89,16 @@ var IntractionHandlers = map[string]func(s *discordgo.Session, i *discordgo.Inte
 			if err != nil {
 				panic(err)
 			}
-			data, err := cmd.YoutubeCommandPreIntractions(variables.YoutubeService, i.ApplicationCommandData().Options[0].StringValue())
-			if err != nil {
-				panic(err)
+			embed, errr := cmd.YoutubeCommandIntractions(ctx, i.ApplicationCommandData().Options[0].StringValue())
+			if embed == nil {
+				_, err = s.InteractionResponseEdit(i.Interaction, &discordgo.WebhookEdit{
+					Content: &errr,
+				})
+			} else {
+				_, err = s.InteractionResponseEdit(i.Interaction, &discordgo.WebhookEdit{
+					Embeds: embed,
+				})
 			}
-			res := cmd.YoutubeCommandIntractions(ctx, data)
-			_, err = s.InteractionResponseEdit(i.Interaction, &discordgo.WebhookEdit{
-				Content: &res,
-			})
 			if err != nil {
 				panic(err)
 			}

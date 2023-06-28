@@ -1,39 +1,32 @@
 package cmd
 
 import (
-	"errors"
 	"sandhu-sahil/bot/framework"
+	"sandhu-sahil/bot/variables"
 
-	"google.golang.org/api/youtube/v3"
+	"github.com/bwmarrin/discordgo"
 )
 
-func YoutubeCommandPreIntractions(client *youtube.Service, query string) (string, error) {
-	list := []string{"id", "snippet"}
+func YoutubeCommandIntractions(ctx *framework.Context, query string) (*[]*discordgo.MessageEmbed, string) {
+	// error checking if session is present
+	sess := ctx.Sessions.GetByGuild(ctx.Guild.ID)
+	if sess == nil {
+		return nil, "No session for this server, please add me to a voice channel to start a session `/join`"
+	}
 
-	// Make the API call to YouTube.
-	call := client.Search.List(list).Order("relevance").Q(query).MaxResults(1)
-	response, err := call.Do()
+	// if session exists but user not in vc
+	vc := ctx.GetVoiceChannel()
+	if vc == nil {
+		return nil, "Please join a voice chat to use this command"
+	}
+	if vc.ID != sess.ChannelId {
+		return nil, "Panic, either we are not in same vc or your vc state is empty"
+	}
+
+	err := ctx.Youtube.SearchYoutube(variables.YoutubeService, query)
 	if err != nil {
-		return "", err
+		return nil, err.Error()
 	}
-
-	var id string
-	// Iterate through each item and add it to the correct list.
-	for _, item := range response.Items {
-		switch item.Id.Kind {
-		case "youtube#video":
-			id = item.Id.VideoId
-		}
-	}
-
-	if id == "" {
-		// return not found anything
-		return "", errors.New("sorry didn't found anything on youtube")
-	}
-
-	return id, nil
-}
-
-func YoutubeCommandIntractions(ctx *framework.Context, id string) string {
-	return "https://www.youtube.com/watch?v=" + id
+	embed := ctx.CreateYoutubeEmbed()
+	return embed, ""
 }

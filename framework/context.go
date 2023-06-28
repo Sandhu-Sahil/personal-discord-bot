@@ -1,6 +1,8 @@
 package framework
 
 import (
+	"fmt"
+
 	"github.com/bwmarrin/discordgo"
 )
 
@@ -39,4 +41,26 @@ func (ctx *Context) GetVoiceChannel() *discordgo.Channel {
 		}
 	}
 	return nil
+}
+
+func (ctx *Context) CreateYoutubeEmbed() *[]*discordgo.MessageEmbed {
+	thumbnail := &discordgo.MessageEmbedThumbnail{
+		URL: ctx.Youtube.Search.Thumbnail.Url,
+	}
+	footer := &discordgo.MessageEmbedFooter{
+		Text:    fmt.Sprintln("requested by " + ctx.User.String()),
+		IconURL: ctx.User.AvatarURL(""),
+	}
+	embed := &discordgo.MessageEmbed{
+		Title:       ctx.Youtube.Search.Title,
+		Color:       0x142837,
+		URL:         fmt.Sprintln("https://www.youtube.com/watch?v=" + ctx.Youtube.Search.Id),
+		Description: ctx.Youtube.Search.Description,
+		Thumbnail:   thumbnail,
+		Footer:      footer,
+	}
+	embeds := []*discordgo.MessageEmbed{
+		embed,
+	}
+	return &embeds
 }

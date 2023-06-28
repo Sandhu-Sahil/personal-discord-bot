@@ -4,7 +4,7 @@ import "sandhu-sahil/bot/framework"
 
 func JoinCommandIntractions(ctx *framework.Context) string {
 	if ctx.Sessions.GetByGuild(ctx.Guild.ID) != nil {
-		return "Already connected! Use `music leave` for the bot to disconnect."
+		return "Already connected! Use `/leave` for the bot to disconnect."
 	}
 	vc := ctx.GetVoiceChannel()
 	if vc == nil {
