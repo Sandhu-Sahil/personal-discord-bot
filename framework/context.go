@@ -29,6 +29,15 @@ func NewContext(discord *discordgo.Session, guild *discordgo.Guild, textChannel 
 	return ctx
 }
 
+func (ctx Context) Reply(content string) *discordgo.Message {
+	msg, err := ctx.Discord.ChannelMessageSend(ctx.TextChannel.ID, content)
+	if err != nil {
+		fmt.Println("Error whilst sending message,", err)
+		return nil
+	}
+	return msg
+}
+
 func (ctx *Context) GetVoiceChannel() *discordgo.Channel {
 	if ctx.VoiceChannel != nil {
 		return ctx.VoiceChannel

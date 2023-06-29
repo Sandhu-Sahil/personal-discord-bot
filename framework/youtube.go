@@ -1,7 +1,11 @@
 package framework
 
 import (
+	"bytes"
+	"encoding/json"
 	"errors"
+	"os/exec"
+	"strings"
 
 	"google.golang.org/api/youtube/v3"
 )
@@ -87,36 +91,36 @@ func (y Youtube) SearchYoutube(client *youtube.Service, query string) error {
 	return nil
 }
 
-// func (youtube Youtube) getType(input string) int {
-// 	if strings.Contains(input, "upload_date") {
-// 		return VIDEO_TYPE
-// 	}
-// 	if strings.Contains(input, "_type") {
-// 		return PLAYLIST_TYPE
-// 	}
-// 	return ERROR_TYPE
-// }
+func (y Youtube) getType(input string) int {
+	if strings.Contains(input, "upload_date") {
+		return VIDEO_TYPE
+	}
+	if strings.Contains(input, "_type") {
+		return PLAYLIST_TYPE
+	}
+	return ERROR_TYPE
+}
 
-// func (youtube Youtube) Get(input string) (int, *string, error) {
-// 	cmd := exec.Command("youtube-dl", "--skip-download", "--print-json", "--flat-playlist", input)
-// 	var out bytes.Buffer
-// 	cmd.Stdout = &out
-// 	err := cmd.Run()
-// 	if err != nil {
-// 		return ERROR_TYPE, nil, err
-// 	}
-// 	str := out.String()
-// 	return youtube.getType(str), &str, nil
-// }
+func (y Youtube) GetFromYT() (int, *string, error) {
+	cmd := exec.Command("yt-dlp", "--skip-download", "--print-json", "--flat-playlist", y.Search.Id)
+	var out bytes.Buffer
+	cmd.Stdout = &out
+	err := cmd.Run()
+	if err != nil {
+		return ERROR_TYPE, nil, err
+	}
+	str := out.String()
+	return y.getType(str), &str, nil
+}
 
-// func (youtube Youtube) Video(input string) (*VideoResult, error) {
-// 	var resp videoResponse
-// 	err := json.Unmarshal([]byte(input), &resp)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	return &VideoResult{resp.Formats[0].Url, resp.Title}, nil
-// }
+func (youtube Youtube) Video(input string) (*VideoResult, error) {
+	var resp videoResponse
+	err := json.Unmarshal([]byte(input), &resp)
+	if err != nil {
+		return nil, err
+	}
+	return &VideoResult{resp.Formats[0].Url, resp.Title}, nil
+}
 
 // func (youtube Youtube) Playlist(input string) (*[]PlaylistVideo, error) {
 // 	lines := strings.Split(input, "\n")

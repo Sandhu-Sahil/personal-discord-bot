@@ -30,9 +30,9 @@ func HandleBot() {
 	variables.Bot.AddHandler(handler.MessageHandler)
 
 	// variables.Bot.Identify.Intents = discordgo.IntentsGuildMessages
-	variables.Bot.Identify.Intents = discordgo.IntentsGuilds | discordgo.IntentsGuildVoiceStates | discordgo.IntentsGuildMembers | discordgo.IntentsGuildPresences | discordgo.IntentsGuildMessages
-	// variables.Bot.ShardID = 0
-	// variables.Bot.ShardCount = 1
+	// variables.Bot.Identify.Intents = discordgo.IntentsGuilds | discordgo.IntentsGuildVoiceStates | discordgo.IntentsGuildMembers | discordgo.IntentsGuildPresences | discordgo.IntentsGuildMessages
+	variables.Bot.ShardID = 0
+	variables.Bot.ShardCount = 1
 	// this same as setting up Intents in the bot
 
 	// command handler

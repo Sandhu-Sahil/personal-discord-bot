@@ -30,9 +30,9 @@ func newSession(guildId, channelId string, connection *Connection) *Session {
 	return session
 }
 
-// func (sess Session) Play(song Song) error {
-// 	return sess.connection.Play(song.Ffmpeg())
-// }
+func (sess Session) Play(song Song) error {
+	return sess.connection.Play(song.Ffmpeg())
+}
 
 // func (sess *Session) Stop() {
 // 	sess.connection.Stop()
