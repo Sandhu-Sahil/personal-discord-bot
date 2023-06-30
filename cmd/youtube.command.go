@@ -25,11 +25,11 @@ func YoutubeCommandIntractions(ctx *framework.Context, query string) (*[]*discor
 
 	err := ctx.Youtube.SearchYoutube(variables.YoutubeService, query)
 	if err != nil {
-		return nil, err.Error()
+		return nil, "Panic, error from youtube: " + err.Error()
 	}
 	types, output, err := ctx.Youtube.GetFromYT()
 	if err != nil {
-		return nil, err.Error()
+		return nil, "Panic, song extraction error: " + err.Error()
 	}
 	if types == framework.ERROR_TYPE {
 		return nil, *output
@@ -47,7 +47,7 @@ func YoutubeCommandIntractions(ctx *framework.Context, query string) (*[]*discor
 
 	video, err := ctx.Youtube.Video(*output)
 	if err != nil {
-		return nil, err.Error()
+		return nil, "Panic, reading json: " + err.Error()
 	}
 	song := framework.NewSong(video.Media, video.Title, ctx.Youtube.Search.Id)
 	sess.Queue.Add(*song)

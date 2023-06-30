@@ -41,7 +41,9 @@ func (queue *SongQueue) Start(sess *Session, callback func(string)) {
 	}
 	if !queue.Running {
 		callback("Stopped playing.")
+		queue.Running = false
 	} else {
 		callback("Finished queue.")
+		queue.Running = false
 	}
 }

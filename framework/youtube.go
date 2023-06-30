@@ -119,7 +119,17 @@ func (youtube Youtube) Video(input string) (*VideoResult, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &VideoResult{resp.Formats[0].Url, resp.Title}, nil
+	var url string
+	// extract the which ha itag 599 and mime type audio/mp4
+	// itag 599 is the highest quality audio and audio/mp4 is the highest quality audio format
+	// it is the recommended format for ffmpeg
+	for _, format := range resp.Formats {
+		if strings.Contains(format.Url, "itag=599") && strings.Contains(format.Url, "mime=audio%2Fmp4") {
+			url = format.Url
+			break
+		}
+	}
+	return &VideoResult{url, resp.Title}, nil
 }
 
 // func (youtube Youtube) Playlist(input string) (*[]PlaylistVideo, error) {
