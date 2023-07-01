@@ -32,6 +32,11 @@ var Commands = []*discordgo.ApplicationCommand{
 		},
 	},
 	{
+		Name:        "skip",
+		Description: "Skip the current song",
+		Type:        discordgo.ChatApplicationCommand,
+	},
+	{
 		Name:        "admin",
 		Description: "Admin only commands",
 		Type:        discordgo.ChatApplicationCommand,

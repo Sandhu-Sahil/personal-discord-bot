@@ -34,9 +34,9 @@ func (sess Session) Play(song Song) error {
 	return sess.connection.Play(song.Ffmpeg())
 }
 
-// func (sess *Session) Stop() {
-// 	sess.connection.Stop()
-// }
+func (sess *Session) Stop() {
+	sess.connection.Stop()
+}
 
 func NewSessionManager() *SessionManager {
 	return &SessionManager{make(map[string]*Session)}

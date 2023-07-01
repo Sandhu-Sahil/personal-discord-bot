@@ -33,17 +33,17 @@ func main() {
 	if _, err := os.Stat("./imports"); err == nil {
 		err := os.RemoveAll("./imports")
 		if err != nil {
-			log.Fatalf("Cannot delete imports folder: %v", err)
+			log.Println("Cannot delete imports folder: " + err.Error())
 		}
-	}
-	// create the imports folder again with a temp file
-	err := os.Mkdir("./imports", 0755)
-	if err != nil {
-		log.Fatalf("Cannot create imports folder: %v", err)
-	}
-	_, err = os.Create("./imports/.temp")
-	if err != nil {
-		log.Fatalf("Cannot create temp file in imports folder: %v", err)
+		// create the imports folder again with a temp file
+		err = os.Mkdir("./imports", 0755)
+		if err != nil {
+			log.Println("Cannot create imports folder: " + err.Error())
+		}
+		_, err = os.Create("./imports/.temp")
+		if err != nil {
+			log.Println("Cannot create temp file in imports folder: " + err.Error())
+		}
 	}
 
 	if variables.RemoveCommands {

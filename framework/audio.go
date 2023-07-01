@@ -117,7 +117,7 @@ func (connection *Connection) DeleteImportFile(file string) {
 	}
 }
 
-// func (connection *Connection) Stop() {
-// 	connection.stopRunning = true
-// 	connection.playing = false
-// }
+func (connection *Connection) Stop() {
+	connection.stopRunning = true
+	connection.playing = false
+}
