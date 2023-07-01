@@ -84,9 +84,15 @@ func (connection *Connection) Play(ffmpeg *exec.Cmd) error {
 	}
 	go connection.sendPCM(connection.voiceConnection, connection.send)
 	for {
-		if connection.stopRunning {
-			ffmpeg.Process.Kill()
+		// if disconnected
+		if !connection.voiceConnection.Ready {
 			connection.DeleteImportFile(ffmpeg.Args[2])
+			ffmpeg.Process.Kill()
+			break
+		}
+		if connection.stopRunning {
+			connection.DeleteImportFile(ffmpeg.Args[2])
+			ffmpeg.Process.Kill()
 			break
 		}
 		audioBuffer := make([]int16, FRAME_SIZE*CHANNELS)

@@ -68,6 +68,8 @@ func (manager *SessionManager) Join(discord *discordgo.Session, guildId, channel
 }
 
 func (manager *SessionManager) Leave(discord *discordgo.Session, session Session) {
+	session.connection.playing = false
+	session.connection.stopRunning = true
 	session.connection.Disconnect()
 	delete(manager.sessions, session.ChannelId) //string is specific to the channelID
 }

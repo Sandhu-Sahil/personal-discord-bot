@@ -29,6 +29,23 @@ func main() {
 	fmt.Println()
 	log.Println("Gracefully shutting down, Please wait...")
 
+	// delete all the files in the imports folder
+	if _, err := os.Stat("./imports"); err == nil {
+		err := os.RemoveAll("./imports")
+		if err != nil {
+			log.Fatalf("Cannot delete imports folder: %v", err)
+		}
+	}
+	// create the imports folder again with a temp file
+	err := os.Mkdir("./imports", 0755)
+	if err != nil {
+		log.Fatalf("Cannot create imports folder: %v", err)
+	}
+	_, err = os.Create("./imports/.temp")
+	if err != nil {
+		log.Fatalf("Cannot create temp file in imports folder: %v", err)
+	}
+
 	if variables.RemoveCommands {
 		for _, cmd := range variables.CreatedCommands {
 			err := variables.Bot.ApplicationCommandDelete(variables.BotID, "", cmd.ID) // if guildID is empty "", it will create global commands
