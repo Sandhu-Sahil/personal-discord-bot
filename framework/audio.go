@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"os"
 	"os/exec"
 
 	"github.com/bwmarrin/discordgo"
@@ -35,8 +36,6 @@ func (connection *Connection) sendPCM(voice *discordgo.VoiceConnection, pcm <-ch
 		connection.sendpcm = false
 	}()
 	encoder, err := gopus.NewEncoder(FRAME_RATE, CHANNELS, gopus.Audio)
-	// fmt.Println("encoder")
-	// fmt.Println(encoder)
 	if err != nil {
 		fmt.Println("NewEncoder error,", err)
 		return
@@ -48,8 +47,6 @@ func (connection *Connection) sendPCM(voice *discordgo.VoiceConnection, pcm <-ch
 			return
 		}
 		opus, err := encoder.Encode(receive, FRAME_SIZE, MAX_BYTES)
-		// fmt.Println(opus)
-		// fmt.Println("opus")
 		if err != nil {
 			fmt.Println("Encoding error,", err)
 			return
@@ -89,17 +86,17 @@ func (connection *Connection) Play(ffmpeg *exec.Cmd) error {
 	for {
 		if connection.stopRunning {
 			ffmpeg.Process.Kill()
+			connection.DeleteImportFile(ffmpeg.Args[2])
 			break
 		}
 		audioBuffer := make([]int16, FRAME_SIZE*CHANNELS)
 		err = binary.Read(buffer, binary.LittleEndian, &audioBuffer)
-		// fmt.Println(audioBuffer)
-		// fmt.Println("read")
-		// fmt.Println(err)
 		if err == io.EOF || err == io.ErrUnexpectedEOF {
+			connection.DeleteImportFile(ffmpeg.Args[2])
 			return nil
 		}
 		if err != nil {
+			connection.DeleteImportFile(ffmpeg.Args[2])
 			return err
 		}
 		connection.send <- audioBuffer
@@ -107,7 +104,14 @@ func (connection *Connection) Play(ffmpeg *exec.Cmd) error {
 	return nil
 }
 
-func (connection *Connection) Stop() {
-	connection.stopRunning = true
-	connection.playing = false
+func (connection *Connection) DeleteImportFile(file string) {
+	err := os.Remove(file)
+	if err != nil {
+		fmt.Println("Error deleting import file,", err)
+	}
 }
+
+// func (connection *Connection) Stop() {
+// 	connection.stopRunning = true
+// 	connection.playing = false
+// }
