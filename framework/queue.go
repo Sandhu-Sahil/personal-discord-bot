@@ -47,3 +47,11 @@ func (queue *SongQueue) Start(sess *Session, callback func(string)) {
 		queue.Running = false
 	}
 }
+
+func (queue *SongQueue) Current() *Song {
+	return queue.current
+}
+
+func (queue *SongQueue) Clear() {
+	queue.list = make([]Song, 0)
+}

@@ -37,6 +37,16 @@ var Commands = []*discordgo.ApplicationCommand{
 		Type:        discordgo.ChatApplicationCommand,
 	},
 	{
+		Name:        "clear-queue",
+		Description: "Clear the songs queue",
+		Type:        discordgo.ChatApplicationCommand,
+	},
+	{
+		Name:        "current-song",
+		Description: "Showcase of current playing song",
+		Type:        discordgo.ChatApplicationCommand,
+	},
+	{
 		Name:        "admin",
 		Description: "Admin only commands",
 		Type:        discordgo.ChatApplicationCommand,

@@ -133,6 +133,54 @@ var IntractionHandlers = map[string]func(s *discordgo.Session, i *discordgo.Inte
 
 		}
 	},
+	"clear-queue": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
+		switch i.Type {
+		case discordgo.InteractionApplicationCommand:
+			defer BotPanicHandler(s, i)
+			err := s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+				Type: discordgo.InteractionResponseDeferredChannelMessageWithSource,
+			})
+			if err != nil {
+				panic(err)
+			}
+			ctx, err := framework.ExtractDataCreateContext(s, i, variables.Sessions, variables.YoutubeApiKey)
+			if err != nil {
+				panic(err)
+			}
+			res := cmd.ClearQueueCommandIntractions(ctx)
+			_, err = s.InteractionResponseEdit(i.Interaction, &discordgo.WebhookEdit{
+				Content: &res,
+			})
+			if err != nil {
+				panic(err)
+			}
+
+		}
+	},
+	"current-song": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
+		switch i.Type {
+		case discordgo.InteractionApplicationCommand:
+			defer BotPanicHandler(s, i)
+			err := s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+				Type: discordgo.InteractionResponseDeferredChannelMessageWithSource,
+			})
+			if err != nil {
+				panic(err)
+			}
+			ctx, err := framework.ExtractDataCreateContext(s, i, variables.Sessions, variables.YoutubeApiKey)
+			if err != nil {
+				panic(err)
+			}
+			res := cmd.CurrentSongCommandIntractions(ctx)
+			_, err = s.InteractionResponseEdit(i.Interaction, &discordgo.WebhookEdit{
+				Content: &res,
+			})
+			if err != nil {
+				panic(err)
+			}
+
+		}
+	},
 	"admin": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
 		switch i.Type {
 		case discordgo.InteractionApplicationCommand:
