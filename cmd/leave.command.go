@@ -7,6 +7,7 @@ func LeaveCommandIntractions(ctx *framework.Context) string {
 	if sess == nil {
 		return "Not in a voice channel! To make the bot join one, use `/join`."
 	}
+	sess.Stop()
 	ctx.Sessions.Leave(ctx.Discord, *sess)
 	return "Left <#" + sess.ChannelId + ">!"
 }
