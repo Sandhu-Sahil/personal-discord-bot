@@ -13,7 +13,7 @@ type Song struct {
 	Id       string
 }
 
-func (song Song) Ffmpeg() *exec.Cmd {
+func (song *Song) Ffmpeg() *exec.Cmd {
 	// return exec.Command("ffmpeg", "-i", song.Media, "-f", "s16le", "-ar", strconv.Itoa(FRAME_RATE), "-ac",
 	// 	strconv.Itoa(CHANNELS), "-probesize", "32M", "pipe:1")
 

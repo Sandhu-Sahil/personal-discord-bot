@@ -157,7 +157,7 @@ var IntractionHandlers = map[string]func(s *discordgo.Session, i *discordgo.Inte
 
 		}
 	},
-	"current-song": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
+	"currently-playing": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
 		switch i.Type {
 		case discordgo.InteractionApplicationCommand:
 			defer BotPanicHandler(s, i)
@@ -179,6 +179,78 @@ var IntractionHandlers = map[string]func(s *discordgo.Session, i *discordgo.Inte
 				panic(err)
 			}
 
+		}
+	},
+	"resume": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
+		switch i.Type {
+		case discordgo.InteractionApplicationCommand:
+
+			defer BotPanicHandler(s, i)
+			err := s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+				Type: discordgo.InteractionResponseDeferredChannelMessageWithSource,
+			})
+			if err != nil {
+				panic(err)
+			}
+			ctx, err := framework.ExtractDataCreateContext(s, i, variables.Sessions, variables.YoutubeApiKey)
+			if err != nil {
+				panic(err)
+			}
+			res := cmd.ResumeCommandIntractions(ctx)
+			_, err = s.InteractionResponseEdit(i.Interaction, &discordgo.WebhookEdit{
+				Content: &res,
+			})
+			if err != nil {
+				panic(err)
+			}
+		}
+	},
+	"pause": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
+		switch i.Type {
+		case discordgo.InteractionApplicationCommand:
+
+			defer BotPanicHandler(s, i)
+			err := s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+				Type: discordgo.InteractionResponseDeferredChannelMessageWithSource,
+			})
+			if err != nil {
+				panic(err)
+			}
+			ctx, err := framework.ExtractDataCreateContext(s, i, variables.Sessions, variables.YoutubeApiKey)
+			if err != nil {
+				panic(err)
+			}
+			res := cmd.PauseCommandIntractions(ctx)
+			_, err = s.InteractionResponseEdit(i.Interaction, &discordgo.WebhookEdit{
+				Content: &res,
+			})
+			if err != nil {
+				panic(err)
+			}
+		}
+	},
+	"queue": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
+		switch i.Type {
+		case discordgo.InteractionApplicationCommand:
+
+			defer BotPanicHandler(s, i)
+			err := s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+				Type: discordgo.InteractionResponseDeferredChannelMessageWithSource,
+			})
+			if err != nil {
+				panic(err)
+			}
+			ctx, err := framework.ExtractDataCreateContext(s, i, variables.Sessions, variables.YoutubeApiKey)
+			if err != nil {
+				panic(err)
+			}
+			res := cmd.QueueCommandIntractions(ctx)
+			_, err = s.InteractionResponseEdit(i.Interaction, &discordgo.WebhookEdit{
+				Content: &res,
+			})
+			if err != nil {
+				panic(err)
+			}
 		}
 	},
 	"admin": func(s *discordgo.Session, i *discordgo.InteractionCreate) {

@@ -8,5 +8,5 @@ func SkipCommandIntractions(ctx *framework.Context) string {
 		return "Not in a voice channel! To make the bot join one, use `/join`."
 	}
 	sess.Stop()
-	return ("Skipped song!")
+	return ("Skipped!")
 }

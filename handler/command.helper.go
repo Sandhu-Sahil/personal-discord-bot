@@ -42,8 +42,23 @@ var Commands = []*discordgo.ApplicationCommand{
 		Type:        discordgo.ChatApplicationCommand,
 	},
 	{
-		Name:        "current-song",
+		Name:        "currently-playing",
 		Description: "Showcase of current playing song",
+		Type:        discordgo.ChatApplicationCommand,
+	},
+	{
+		Name:        "queue",
+		Description: "Showcase of queue",
+		Type:        discordgo.ChatApplicationCommand,
+	},
+	{
+		Name:        "pause",
+		Description: "Pause the current song",
+		Type:        discordgo.ChatApplicationCommand,
+	},
+	{
+		Name:        "resume",
+		Description: "Resume the current song",
 		Type:        discordgo.ChatApplicationCommand,
 	},
 	{

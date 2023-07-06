@@ -30,7 +30,7 @@ func newSession(guildId, channelId string, connection *Connection) *Session {
 	return session
 }
 
-func (sess Session) Play(song Song) error {
+func (sess *Session) Play(song Song) error {
 	return sess.connection.Play(song.Ffmpeg())
 }
 
@@ -38,11 +38,19 @@ func (sess *Session) Stop() {
 	sess.connection.Stop()
 }
 
+func (sess *Session) Pause() {
+	sess.connection.Pause()
+}
+
+func (sess *Session) Resume() {
+	sess.connection.Resume()
+}
+
 func NewSessionManager() *SessionManager {
 	return &SessionManager{make(map[string]*Session)}
 }
 
-func (manager SessionManager) GetByGuild(guildId string) *Session {
+func (manager *SessionManager) GetByGuild(guildId string) *Session {
 	for _, sess := range manager.sessions {
 		if sess.guildId == guildId {
 			return sess
@@ -51,7 +59,7 @@ func (manager SessionManager) GetByGuild(guildId string) *Session {
 	return nil
 }
 
-func (manager SessionManager) GetByChannel(channelId string) (*Session, bool) {
+func (manager *SessionManager) GetByChannel(channelId string) (*Session, bool) {
 	sess, found := manager.sessions[channelId]
 	return sess, found
 }

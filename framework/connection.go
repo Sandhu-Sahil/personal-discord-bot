@@ -13,6 +13,7 @@ type Connection struct {
 	sendpcm         bool
 	stopRunning     bool
 	playing         bool
+	paused          bool
 }
 
 func NewConnection(voiceConnection *discordgo.VoiceConnection) *Connection {
@@ -21,6 +22,14 @@ func NewConnection(voiceConnection *discordgo.VoiceConnection) *Connection {
 	return connection
 }
 
-func (connection Connection) Disconnect() {
+func (connection *Connection) Disconnect() {
 	connection.voiceConnection.Disconnect()
+}
+
+func (connection *Connection) Pause() {
+	connection.paused = true
+}
+
+func (connection *Connection) Resume() {
+	connection.paused = false
 }

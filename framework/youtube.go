@@ -55,7 +55,7 @@ func NewYoutube(apiKey string) *Youtube {
 	}
 }
 
-func (y Youtube) SearchYoutube(client *youtube.Service, query string) error {
+func (y *Youtube) SearchYoutube(client *youtube.Service, query string) error {
 	list := []string{"id", "snippet"}
 
 	// Make the API call to YouTube.
@@ -91,7 +91,7 @@ func (y Youtube) SearchYoutube(client *youtube.Service, query string) error {
 	return nil
 }
 
-func (y Youtube) getType(input string) int {
+func (y *Youtube) getType(input string) int {
 	if strings.Contains(input, "upload_date") {
 		return VIDEO_TYPE
 	}
@@ -101,7 +101,7 @@ func (y Youtube) getType(input string) int {
 	return ERROR_TYPE
 }
 
-func (y Youtube) GetFromYT() (int, *string, error) {
+func (y *Youtube) GetFromYT() (int, *string, error) {
 	cmd := exec.Command("yt-dlp", "--skip-download", "--print-json", "--flat-playlist", y.Search.Id)
 	var out bytes.Buffer
 	cmd.Stdout = &out
@@ -113,7 +113,7 @@ func (y Youtube) GetFromYT() (int, *string, error) {
 	return y.getType(str), &str, nil
 }
 
-func (youtube Youtube) Video(input string) (*VideoResult, error) {
+func (y *Youtube) Video(input string) (*VideoResult, error) {
 	var resp videoResponse
 	err := json.Unmarshal([]byte(input), &resp)
 	if err != nil {

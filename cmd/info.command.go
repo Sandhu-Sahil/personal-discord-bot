@@ -37,15 +37,18 @@ func InfoCommandIntractions(ctx *framework.Context) string {
 	}
 	stats := runtime.MemStats{}
 	runtime.ReadMemStats(&stats)
+
+	spacing := 30
+
 	buffer := bytes.NewBufferString("```")
 
-	buffer.WriteString("owner username: " + *userString)
-	buffer.WriteString("\ngo version: " + runtime.Version())
-	buffer.WriteString("\ndiscordgo version: " + discordgo.VERSION)
-	buffer.WriteString("\nuptime: " + getDurationString(time.Since(startTime)))
-	buffer.WriteString(fmt.Sprintf("\nmemory used: %s / %s (%s garbage collected)", humanize.Bytes(stats.Alloc),
+	buffer.WriteString("owner username: " + framework.SpacingIndentation(spacing, len("owner username:")) + *userString)
+	buffer.WriteString("\ngo version: " + framework.SpacingIndentation(spacing, len("go version:")) + runtime.Version())
+	buffer.WriteString("\ndiscordgo version: " + framework.SpacingIndentation(spacing, len("discordgo version:")) + discordgo.VERSION)
+	buffer.WriteString("\nuptime: " + framework.SpacingIndentation(spacing, len("uptime:")) + getDurationString(time.Since(startTime)))
+	buffer.WriteString(fmt.Sprintf("\nmemory used: %s%s / %s (%s garbage collected)", framework.SpacingIndentation(spacing, len("memory used:")), humanize.Bytes(stats.Alloc),
 		humanize.Bytes(stats.Sys), humanize.Bytes(stats.TotalAlloc)))
-	buffer.WriteString("\nconcurrent tasks: " + strconv.Itoa(runtime.NumGoroutine()))
+	buffer.WriteString("\nconcurrent tasks: " + framework.SpacingIndentation(spacing, len("concurrent tasks:")) + strconv.Itoa(runtime.NumGoroutine()))
 	buffer.WriteString("```")
 	return buffer.String()
 }

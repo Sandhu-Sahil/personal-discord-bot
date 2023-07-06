@@ -77,6 +77,7 @@ func (connection *Connection) Play(ffmpeg *exec.Cmd) error {
 	defer func() {
 		connection.playing = false
 	}()
+	connection.paused = false
 	connection.voiceConnection.Speaking(true)
 	defer connection.voiceConnection.Speaking(false)
 	if connection.send == nil {
@@ -95,6 +96,12 @@ func (connection *Connection) Play(ffmpeg *exec.Cmd) error {
 			ffmpeg.Process.Kill()
 			break
 		}
+
+		// if paused
+		if connection.paused {
+			continue
+		}
+
 		audioBuffer := make([]int16, FRAME_SIZE*CHANNELS)
 		err = binary.Read(buffer, binary.LittleEndian, &audioBuffer)
 		if err == io.EOF || err == io.ErrUnexpectedEOF {

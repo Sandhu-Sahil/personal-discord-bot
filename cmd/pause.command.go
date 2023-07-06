@@ -2,14 +2,14 @@ package cmd
 
 import "sandhu-sahil/bot/framework"
 
-func ClearQueueCommandIntractions(ctx *framework.Context) string {
+func PauseCommandIntractions(ctx *framework.Context) string {
 	sess := ctx.Sessions.GetByGuild(ctx.Guild.ID)
 	if sess == nil {
 		return ("Not in a voice channel! To make the bot join one, use `/join`.")
 	}
-	if !sess.Queue.HasNext() {
-		return ("Queue is already empty")
+	if !sess.Queue.Running {
+		return ("Session is not running")
 	}
-	sess.Queue.Clear()
-	return ("Cleared the queue")
+	sess.Pause()
+	return ("Paused")
 }

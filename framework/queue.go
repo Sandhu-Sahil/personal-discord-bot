@@ -16,7 +16,7 @@ func (queue *SongQueue) Add(song Song) {
 	queue.list = append(queue.list, song)
 }
 
-func (queue SongQueue) HasNext() bool {
+func (queue *SongQueue) HasNext() bool {
 	return len(queue.list) > 0
 }
 
@@ -54,4 +54,8 @@ func (queue *SongQueue) Current() *Song {
 
 func (queue *SongQueue) Clear() {
 	queue.list = make([]Song, 0)
+}
+
+func (queue *SongQueue) List() []Song {
+	return queue.list
 }

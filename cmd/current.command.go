@@ -9,7 +9,7 @@ func CurrentSongCommandIntractions(ctx *framework.Context) string {
 	}
 	current := sess.Queue.Current()
 	if current == nil {
-		return ("The song queue is empty! Add a song with `/youtube`.")
+		return ("The queue is empty! Add with `/youtube`.")
 	}
 	return ("Currently playing `" + current.Title + "`.")
 }

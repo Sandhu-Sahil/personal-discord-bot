@@ -31,7 +31,7 @@ func main() {
 
 	// delete all the files in the imports folder
 	if _, err := os.Stat("./imports"); err == nil {
-		err := os.RemoveAll("./imports")
+		err := os.RemoveAll("imports")
 		if err != nil {
 			log.Println("Cannot delete imports folder: " + err.Error())
 		}
