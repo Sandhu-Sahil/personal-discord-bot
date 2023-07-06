@@ -19,7 +19,7 @@ func QueueCommandIntractions(ctx *framework.Context) string {
 	buffer.WriteString("Queue: ")
 
 	for i, song := range sess.Queue.List() {
-		if len(song.Title) > 50 {
+		if len(song.Title) > 65 {
 			song.Title = song.Title[:65] + "..."
 		}
 		buffer.WriteString(fmt.Sprintf("\n \t%d. %s", i+1, song.Title))

@@ -8,6 +8,7 @@ import (
 	"io"
 	"os"
 	"os/exec"
+	"strconv"
 
 	"github.com/bwmarrin/discordgo"
 	"layeh.com/gopus"
@@ -41,6 +42,10 @@ func (connection *Connection) sendPCM(voice *discordgo.VoiceConnection, pcm <-ch
 		return
 	}
 	for {
+		if connection.paused {
+			continue
+		}
+
 		receive, ok := <-pcm
 		if !ok {
 			fmt.Println("PCM channel closed")
@@ -105,8 +110,23 @@ func (connection *Connection) Play(ffmpeg *exec.Cmd) error {
 		audioBuffer := make([]int16, FRAME_SIZE*CHANNELS)
 		err = binary.Read(buffer, binary.LittleEndian, &audioBuffer)
 		if err == io.EOF || err == io.ErrUnexpectedEOF {
-			connection.DeleteImportFile(ffmpeg.Args[2])
-			return nil
+			if connection.loop {
+				// restart song
+				ffmpeg = exec.Command("ffmpeg", "-i", ffmpeg.Args[2], "-f", "s16le", "-ar", strconv.Itoa(FRAME_RATE), "-ac", strconv.Itoa(CHANNELS), "pipe:1")
+				out, err = ffmpeg.StdoutPipe()
+				if err != nil {
+					return err
+				}
+				buffer = bufio.NewReaderSize(out, 16384)
+				err = ffmpeg.Start()
+				if err != nil {
+					return err
+				}
+				continue
+			} else {
+				connection.DeleteImportFile(ffmpeg.Args[2])
+				return nil
+			}
 		}
 		if err != nil {
 			connection.DeleteImportFile(ffmpeg.Args[2])

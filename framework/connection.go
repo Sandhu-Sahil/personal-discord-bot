@@ -14,6 +14,7 @@ type Connection struct {
 	stopRunning     bool
 	playing         bool
 	paused          bool
+	loop            bool
 }
 
 func NewConnection(voiceConnection *discordgo.VoiceConnection) *Connection {
@@ -32,4 +33,8 @@ func (connection *Connection) Pause() {
 
 func (connection *Connection) Resume() {
 	connection.paused = false
+}
+
+func (connection *Connection) ToogleLoop() {
+	connection.loop = !connection.loop
 }

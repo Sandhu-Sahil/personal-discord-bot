@@ -46,6 +46,10 @@ func (sess *Session) Resume() {
 	sess.connection.Resume()
 }
 
+func (sess *Session) Loop() {
+	sess.connection.ToogleLoop()
+}
+
 func NewSessionManager() *SessionManager {
 	return &SessionManager{make(map[string]*Session)}
 }

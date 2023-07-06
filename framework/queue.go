@@ -59,3 +59,16 @@ func (queue *SongQueue) Clear() {
 func (queue *SongQueue) List() []Song {
 	return queue.list
 }
+
+func (queue *SongQueue) Length() int {
+	return len(queue.list)
+}
+
+func (queue *SongQueue) Remove(index int) string {
+	song := queue.list[index]
+	queue.list = append(queue.list[:index], queue.list[index+1:]...)
+	if len(song.Title) < 50 {
+		return song.Title
+	}
+	return song.Title[:50]
+}

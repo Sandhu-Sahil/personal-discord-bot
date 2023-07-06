@@ -62,6 +62,24 @@ var Commands = []*discordgo.ApplicationCommand{
 		Type:        discordgo.ChatApplicationCommand,
 	},
 	{
+		Name:        "loop",
+		Description: "Loop the current song",
+		Type:        discordgo.ChatApplicationCommand,
+	},
+	{
+		Name:        "queue-remove",
+		Description: "Remove a song from queue",
+		Type:        discordgo.ChatApplicationCommand,
+		Options: []*discordgo.ApplicationCommandOption{
+			{
+				Name:        "index",
+				Description: "Index of song to remove",
+				Type:        discordgo.ApplicationCommandOptionInteger,
+				Required:    true,
+			},
+		},
+	},
+	{
 		Name:        "admin",
 		Description: "Admin only commands",
 		Type:        discordgo.ChatApplicationCommand,
