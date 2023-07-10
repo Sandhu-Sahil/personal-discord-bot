@@ -1,10 +1,20 @@
 package framework
 
 import (
+	"encoding/json"
 	"fmt"
 
 	"github.com/bwmarrin/discordgo"
 )
+
+type Embed struct {
+	PlayListCount     int    `json:"playlist_count"`
+	PlaylistTitle     string `json:"playlist_title"`
+	PlaylistUploader  string `json:"playlist_uploader"`
+	PlaylistThumbnail []struct {
+		Url string `json:"url"`
+	} `json:"thumbnails"`
+}
 
 type Context struct {
 	Discord      *discordgo.Session
@@ -70,6 +80,36 @@ func (ctx *Context) CreateYoutubeEmbed() *[]*discordgo.MessageEmbed {
 	}
 	embeds := []*discordgo.MessageEmbed{
 		embed,
+	}
+	return &embeds
+}
+
+func (ctx *Context) CreateYoutubePlaylistEmbed(data string, url string) *[]*discordgo.MessageEmbed {
+	// extract json data in embed struct
+	var embed Embed
+	err := json.Unmarshal([]byte(data), &embed)
+	if err != nil {
+		ctx.Reply(fmt.Sprint("Error whilst unmarshalling json," + err.Error()))
+		return nil
+	}
+
+	thumbnail := &discordgo.MessageEmbedThumbnail{
+		URL: embed.PlaylistThumbnail[0].Url,
+	}
+	footer := &discordgo.MessageEmbedFooter{
+		Text:    fmt.Sprintln("requested by " + ctx.User.String()),
+		IconURL: ctx.User.AvatarURL(""),
+	}
+	finalEmbed := &discordgo.MessageEmbed{
+		Title:       embed.PlaylistTitle,
+		Color:       0x142837,
+		URL:         url,
+		Description: "Playlist by " + embed.PlaylistUploader + "\n" + fmt.Sprintln("Total videos: "+fmt.Sprint(embed.PlayListCount)),
+		Thumbnail:   thumbnail,
+		Footer:      footer,
+	}
+	embeds := []*discordgo.MessageEmbed{
+		finalEmbed,
 	}
 	return &embeds
 }

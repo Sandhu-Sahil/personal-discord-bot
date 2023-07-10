@@ -26,5 +26,11 @@ func QueueCommandIntractions(ctx *framework.Context) string {
 	}
 	buffer.WriteString("```")
 
+	// check length of buffer
+	if len(buffer.String()) > 2000 {
+		// retunr that part of buffer
+		return buffer.String()[:1985] + "```" + "more..."
+	}
+
 	return buffer.String()
 }

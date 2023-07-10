@@ -2,8 +2,6 @@ package framework
 
 import (
 	"encoding/json"
-	"fmt"
-	"sandhu-sahil/bot/framework"
 )
 
 type SongQueue struct {
@@ -54,38 +52,38 @@ func (queue *SongQueue) Start(sess *Session, callback func(string)) {
 	}
 }
 
-func (queue *SongQueue) StartPlaylist(data []string, ctx framework.Context, sess *framework.Session, callback func(string)) {
+func (queue *SongQueue) StartPlaylist(data []string, ctx *Context, sess *Session, callback func(string)) {
 	for index, line := range data {
-		fmt.Println(line)
 		if len(line) == 0 {
-			ctx.Reply("Panic, no songs found")
+			ctx.Reply("Panic, no songs found at a point in the playlist, recovered...")
+			return
 		}
 		if line == "" || line == "\n" {
 			continue
 		}
-		var video framework.PlaylistVideo
+		var video PlaylistVideo
 		err := json.Unmarshal([]byte(line), &video)
 		if err != nil {
-			ctx.Reply(err.Error())
+			ctx.Reply("Panic, reading json: " + err.Error() + ", recovered...")
+			continue
 		}
 
 		ctx.Youtube.Search.Id = video.Id
 		types, outputTemp, err := ctx.Youtube.GetFromYT()
 		if err != nil {
-			ctx.Reply(err.Error())
+			ctx.Reply("Panic, song extraction error: " + err.Error() + ", recovered...")
 		}
-		if types == framework.ERROR_TYPE {
-			ctx.Reply(*outputTemp)
-		}
-		if types != framework.VIDEO_TYPE {
-			ctx.Reply("Panic, not a video")
+		if types != VIDEO_TYPE {
+			ctx.Reply("A search in the playlist is not a video type or is not available at current time")
+			continue
 		}
 
 		mainVideo, err := ctx.Youtube.Video(*outputTemp)
 		if err != nil {
-			ctx.Reply("Panic, reading json: " + err.Error())
+			ctx.Reply("Panic, reading json: " + err.Error() + ", recovered...")
+			continue
 		}
-		song := framework.NewSong(mainVideo.Media, mainVideo.Title, ctx.Youtube.Search.Id)
+		song := NewSong(mainVideo.Media, mainVideo.Title, ctx.Youtube.Search.Id)
 		sess.Queue.Add(*song)
 		if index == 0 {
 			if !sess.Queue.Running {

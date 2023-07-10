@@ -80,7 +80,7 @@ var Commands = []*discordgo.ApplicationCommand{
 		},
 	},
 	{
-		Name:        "youtube-playlist",
+		Name:        "playlist-youtube",
 		Description: "Play youtube playlist",
 		Type:        discordgo.ChatApplicationCommand,
 		Options: []*discordgo.ApplicationCommandOption{

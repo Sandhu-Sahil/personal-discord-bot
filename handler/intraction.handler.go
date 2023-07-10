@@ -301,7 +301,7 @@ var IntractionHandlers = map[string]func(s *discordgo.Session, i *discordgo.Inte
 			}
 		}
 	},
-	"youtube-playlist": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
+	"playlist-youtube": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
 		switch i.Type {
 		case discordgo.InteractionApplicationCommand:
 
@@ -317,11 +317,16 @@ var IntractionHandlers = map[string]func(s *discordgo.Session, i *discordgo.Inte
 			if err != nil {
 				panic(err)
 			}
-			res := cmd.YoutubePlaylistCommandIntractions(ctx, i.ApplicationCommandData().Options[0].StringValue())
-			_, err = s.InteractionResponseEdit(i.Interaction, &discordgo.WebhookEdit{
-				Content: &res,
-			})
-
+			embed, res := cmd.YoutubePlaylistCommandIntractions(ctx, i.ApplicationCommandData().Options[0].StringValue())
+			if embed == nil {
+				_, err = s.InteractionResponseEdit(i.Interaction, &discordgo.WebhookEdit{
+					Content: &res,
+				})
+			} else {
+				_, err = s.InteractionResponseEdit(i.Interaction, &discordgo.WebhookEdit{
+					Embeds: embed,
+				})
+			}
 			if err != nil {
 				panic(err)
 			}

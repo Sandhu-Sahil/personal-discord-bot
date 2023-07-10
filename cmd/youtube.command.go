@@ -31,9 +31,6 @@ func YoutubeCommandIntractions(ctx *framework.Context, query string) (*[]*discor
 	if err != nil {
 		return nil, "Panic, song extraction error: " + err.Error()
 	}
-	if types == framework.ERROR_TYPE {
-		return nil, *output
-	}
 	if types != framework.VIDEO_TYPE {
 		return nil, "Panic, not a video"
 	}
