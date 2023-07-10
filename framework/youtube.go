@@ -132,6 +132,31 @@ func (y *Youtube) Video(input string) (*VideoResult, error) {
 	return &VideoResult{url, resp.Title}, nil
 }
 
+func (y Youtube) ExtractPlaylistId(input string) (string, error) {
+	// in input find list= and extract the id
+	// example input: https://www.youtube.com/watch?v=5qap5aO4i9A&list=PLx0sYbCqOb8TBPRdmBHs5Iftvv9TPboYG
+	// output: PLx0sYbCqOb8TBPRdmBHs5Iftvv9TPboYG
+	id := strings.Split(input, "list=")
+	if len(id) < 2 {
+		return "", errors.New("invalid youtube playlist url")
+	}
+	final_id := strings.Split(id[1], "&")
+	return final_id[0], nil
+}
+
+func (y Youtube) GetFromYTPlaylist(input string) (string, error) {
+	cmd := exec.Command("yt-dlp", "--skip-download", "--print-json", "--flat-playlist", input)
+	var out bytes.Buffer
+	cmd.Stdout = &out
+	err := cmd.Run()
+	if err != nil {
+		return "", err
+	}
+	str := out.String()
+
+	return str, nil
+}
+
 // func (youtube Youtube) Playlist(input string) (*[]PlaylistVideo, error) {
 // 	lines := strings.Split(input, "\n")
 // 	videos := make([]PlaylistVideo, 0)

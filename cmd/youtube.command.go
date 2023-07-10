@@ -34,16 +34,9 @@ func YoutubeCommandIntractions(ctx *framework.Context, query string) (*[]*discor
 	if types == framework.ERROR_TYPE {
 		return nil, *output
 	}
-	// if types == framework.VIDEO_TYPE {
-	// 	// if video is already playing
-	// 	if sess.Queue.Running() && sess.Playing {
-	// 		sess.Queue = append(sess.Queue, *output)
-	// 		return nil, "Added to queue"
-	// 	}
-	// 	sess.Playing = true
-	// 	sess.Queue = append(sess.Queue, *output)
-	// 	return nil, "Playing"
-	// }
+	if types != framework.VIDEO_TYPE {
+		return nil, "Panic, not a video"
+	}
 
 	video, err := ctx.Youtube.Video(*output)
 	if err != nil {
