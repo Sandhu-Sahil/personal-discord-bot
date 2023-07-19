@@ -67,6 +67,11 @@ var Commands = []*discordgo.ApplicationCommand{
 		Type:        discordgo.ChatApplicationCommand,
 	},
 	{
+		Name:        "replay",
+		Description: "Replay the current song",
+		Type:        discordgo.ChatApplicationCommand,
+	},
+	{
 		Name:        "queue-remove",
 		Description: "Remove a song from queue",
 		Type:        discordgo.ChatApplicationCommand,
@@ -80,7 +85,7 @@ var Commands = []*discordgo.ApplicationCommand{
 		},
 	},
 	{
-		Name:        "playlist-youtube",
+		Name:        "youtube-playlist-search",
 		Description: "Play youtube playlist",
 		Type:        discordgo.ChatApplicationCommand,
 		Options: []*discordgo.ApplicationCommandOption{

@@ -107,8 +107,25 @@ func (connection *Connection) Play(ffmpeg *exec.Cmd) error {
 			continue
 		}
 
+		// if replaying
+		if connection.replay {
+			connection.replay = false
+			ffmpeg = exec.Command("ffmpeg", "-i", ffmpeg.Args[2], "-f", "s16le", "-ar", strconv.Itoa(FRAME_RATE), "-ac", strconv.Itoa(CHANNELS), "pipe:1")
+			out, err = ffmpeg.StdoutPipe()
+			if err != nil {
+				return err
+			}
+			buffer = bufio.NewReaderSize(out, 16384)
+			err = ffmpeg.Start()
+			if err != nil {
+				return err
+			}
+			continue
+		}
+
 		audioBuffer := make([]int16, FRAME_SIZE*CHANNELS)
 		err = binary.Read(buffer, binary.LittleEndian, &audioBuffer)
+
 		if err == io.EOF || err == io.ErrUnexpectedEOF {
 			if connection.loop {
 				// restart song

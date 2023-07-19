@@ -25,11 +25,11 @@ func YoutubeCommandIntractions(ctx *framework.Context, query string) (*[]*discor
 
 	err := ctx.Youtube.SearchYoutube(variables.YoutubeService, query)
 	if err != nil {
-		return nil, "Panic, error from youtube: " + err.Error()
+		return nil, "Panic, error from youtube video not found: " + err.Error()
 	}
 	types, output, err := ctx.Youtube.GetFromYT()
 	if err != nil {
-		return nil, "Panic, song extraction error: " + err.Error()
+		return nil, "Panic, video extraction error from -dl: " + err.Error()
 	}
 	if types != framework.VIDEO_TYPE {
 		return nil, "Panic, not a video"

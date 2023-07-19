@@ -50,6 +50,10 @@ func (sess *Session) Loop() {
 	sess.connection.ToogleLoop()
 }
 
+func (sess *Session) Replay() {
+	sess.connection.ToogleReplay()
+}
+
 func NewSessionManager() *SessionManager {
 	return &SessionManager{make(map[string]*Session)}
 }
