@@ -10,12 +10,27 @@ import (
 func YoutubeCommandIntractions(ctx *framework.Context, query string) (*[]*discordgo.MessageEmbed, string) {
 	// error checking if session is present
 	sess := ctx.Sessions.GetByGuild(ctx.Guild.ID)
+
+	var vc *discordgo.Channel
+	var err error
 	if sess == nil {
-		return nil, "No session for this server, please add me to a voice channel to start a session `/join`"
+		vc := ctx.GetVoiceChannel()
+		if vc == nil {
+			return nil, "You must be in a voice channel to use the bot!"
+		}
+		sess, err = ctx.Sessions.Join(ctx.Discord, ctx.Guild.ID, vc.ID, framework.JoinProperties{
+			Muted:    false,
+			Deafened: true,
+		})
+		if err != nil {
+			return nil, "An error occured at the time of joining! Please try again later "
+		}
 	}
 
 	// if session exists but user not in vc
-	vc := ctx.GetVoiceChannel()
+	if vc == nil {
+		vc = ctx.GetVoiceChannel()
+	}
 	if vc == nil {
 		return nil, "Please join a voice chat to use this command"
 	}
@@ -23,7 +38,7 @@ func YoutubeCommandIntractions(ctx *framework.Context, query string) (*[]*discor
 		return nil, "Panic, either we are not in same vc or your vc state is empty"
 	}
 
-	err := ctx.Youtube.SearchYoutube(variables.YoutubeService, query)
+	err = ctx.Youtube.SearchYoutube(variables.YoutubeService, query)
 	if err != nil {
 		return nil, "Panic, error from youtube video not found: " + err.Error()
 	}

@@ -5,9 +5,10 @@ import (
 )
 
 type SongQueue struct {
-	list    []Song
-	current *Song
-	Running bool
+	list      []Song
+	current   *Song
+	LoopQueue bool
+	Running   bool
 }
 
 func newSongQueue() *SongQueue {
@@ -28,6 +29,9 @@ func (queue *SongQueue) Next() Song {
 	song := queue.list[0]
 	queue.list = queue.list[1:]
 	queue.current = &song
+	if queue.LoopQueue {
+		queue.Add(song)
+	}
 	return song
 }
 
@@ -118,4 +122,8 @@ func (queue *SongQueue) Remove(index int) string {
 		return song.Title
 	}
 	return song.Title[:50]
+}
+
+func (queue *SongQueue) ToogleLoopQueue() {
+	queue.LoopQueue = !queue.LoopQueue
 }

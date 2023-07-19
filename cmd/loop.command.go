@@ -11,5 +11,5 @@ func LoopCommandIntractions(ctx *framework.Context) string {
 		return ("Session is not running")
 	}
 	sess.Loop()
-	return ("Toogled loop!")
+	return ("Toogled repeat!") // name changed from loop to repeat suggested by shady
 }

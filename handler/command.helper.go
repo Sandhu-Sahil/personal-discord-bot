@@ -62,8 +62,13 @@ var Commands = []*discordgo.ApplicationCommand{
 		Type:        discordgo.ChatApplicationCommand,
 	},
 	{
-		Name:        "loop",
-		Description: "Loop the current song",
+		Name:        "repeat",
+		Description: "Toggle repeat for current song",
+		Type:        discordgo.ChatApplicationCommand,
+	},
+	{
+		Name:        "loop-queue",
+		Description: "Toggle loop for current queue",
 		Type:        discordgo.ChatApplicationCommand,
 	},
 	{
