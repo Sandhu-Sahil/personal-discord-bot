@@ -1,2 +1,2 @@
 bot:
-	go run main.go
+	bash makebot.sh

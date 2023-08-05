@@ -106,6 +106,14 @@ var Commands = []*discordgo.ApplicationCommand{
 		Name:        "admin",
 		Description: "Admin only commands",
 		Type:        discordgo.ChatApplicationCommand,
+		Options: []*discordgo.ApplicationCommandOption{
+			{
+				Name:        "task",
+				Description: "Task to perform",
+				Type:        discordgo.ApplicationCommandOptionString,
+				Required:    true,
+			},
+		},
 	},
 	{
 		Name:        "info",
