@@ -72,9 +72,9 @@ func AdminCommandIntractions(s *discordgo.Session, i *discordgo.InteractionCreat
 		// get user id from the command
 		userid := "651294046219927562"
 		// get guild id from the command
-		guildid := "481844824526290944"
+		guildid := "1123316389340528731"
 		// get role id from the command
-		roleid := "1121715198915530772"
+		roleid := "1123317939848880221"
 		// assign role to the user
 		err := s.GuildMemberRoleAdd(guildid, userid, roleid)
 		if err != nil {

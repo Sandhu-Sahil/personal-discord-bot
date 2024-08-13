@@ -52,6 +52,7 @@ func main() {
 			if err != nil {
 				log.Fatalf("Cannot delete %q command: %v", cmd.Name, err)
 			}
+			fmt.Printf("Command %q has been deleted\n", cmd.Name)
 		}
 	}
 

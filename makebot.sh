@@ -11,7 +11,7 @@ if ! command -v go &> /dev/null; then
 fi
 
 # Install the required Go modules
-go mod download
+# go mod download
 
 # Build the Golang bot
 go build -o make_bot main.go
