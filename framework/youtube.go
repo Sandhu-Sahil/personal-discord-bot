@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"os/exec"
 	"strings"
 
@@ -103,7 +102,7 @@ func (y *Youtube) getType(input string) int {
 }
 
 func (y *Youtube) GetFromYT() (int, *string, error) {
-	fmt.Println("yt-dlp", "--skip-download", "--print-json", "--flat-playlist", y.Search.Id)
+	// fmt.Println("yt-dlp", "--skip-download", "--print-json", "--flat-playlist", y.Search.Id)
 	cmd := exec.Command("yt-dlp", "--skip-download", "--print-json", "--flat-playlist", y.Search.Id)
 	var out bytes.Buffer
 	cmd.Stdout = &out
@@ -131,7 +130,7 @@ func (y *Youtube) Video(input string) (*VideoResult, error) {
 			break
 		}
 	}
-	fmt.Println(resp)
+	// fmt.Println(resp)
 	return &VideoResult{url, resp.Title}, nil
 }
 

@@ -11,3 +11,9 @@ REMOVE_COMMANDS=    <true or false>
 DEFAULT_STATUS=     <text status of bot profile>
 DEVELOPER_KEY=      <developer youtube api key from google developer console>
 ```
+
+install yt-dlp and ffmpeg for music commands
+```
+sudo apt install ffmpeg
+sudo snap install yt-dlp
+```
